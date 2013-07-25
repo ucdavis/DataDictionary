@@ -23,7 +23,7 @@ namespace BannerDataDictionary.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-            ViewBag.ReturnUrl = returnUrl;
+            UCDArch.Web.Authentication.CASHelper.LoginAndRedirect();
             return View();
         }
 

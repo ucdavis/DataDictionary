@@ -9,6 +9,7 @@ using Dapper;
 
 namespace BannerDataDictionary.Controllers
 {
+    [Authorize]
     public class HomeController : ApplicationController
     {
         public ActionResult Index()
