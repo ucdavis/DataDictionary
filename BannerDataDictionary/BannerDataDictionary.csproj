@@ -235,7 +235,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
-    <Compile Include="Models\TableController.cs" />
     <Compile Include="Models\TableDetailsModel.cs" />
     <Compile Include="Models\DataClasses.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -498,7 +497,6 @@
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Web.config" />
@@ -510,8 +508,8 @@
     <Content Include="Views\Sample\Form.cshtml" />
     <Content Include="Views\Sample\DisplayForm.cshtml" />
     <Content Include="Views\Sample\DataTable.cshtml" />
-    <Content Include="Views\Tables\Details.cshtml" />
-    <Content Include="Views\Tables\Index.cshtml" />
+    <Content Include="Views\Home\Details.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

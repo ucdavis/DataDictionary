@@ -22,11 +22,8 @@
 
 @section subnav
 {
-    <li>@Html.ActionLink("Sample Index", "Index")</li>
-    <li>@Html.ActionLink("Form", "Form")</li>
-    <li>@Html.ActionLink("Table", "Table")</li>
-    <li class="active">@Html.ActionLink("Data Tables", "DataTable")</li>
-    <li>@Html.ActionLink("Display Form", "DisplayForm")</li>
+    <li>@Html.ActionLink("Table Listing", "Index", "Home")</li>
+    <li class="active">@Html.ActionLink("Table Details", "Details", "Home",null, new {id=@Model.TableName})</li>
 }
 
 @section AdditionalScripts
