@@ -1,48 +1,81 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title>@ViewBag.Title - My ASP.NET MVC Application</title>
-        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-        <meta name="viewport" content="width=device-width" />
-        @Styles.Render("~/Content/css")
-        @Scripts.Render("~/bundles/modernizr")
-    </head>
-    <body>
-        <header>
-            <div class="content-wrapper">
-                <div class="float-left">
-                    <p class="site-title">@Html.ActionLink("your logo here", "Index", "Home")</p>
-                </div>
-                <div class="float-right">
-                    <section id="login">
-                        @Html.Partial("_LoginPartial")
-                    </section>
-                    <nav>
-                        <ul id="menu">
-                            <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                            <li>@Html.ActionLink("About", "About", "Home")</li>
-                            <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-        </header>
-        <div id="body">
-            @RenderSection("featured", required: false)
-            <section class="content-wrapper main-content clear-fix">
-                @RenderBody()
-            </section>
-        </div>
-        <footer>
-            <div class="content-wrapper">
-                <div class="float-left">
-                    <p>&copy; @DateTime.Now.Year - My ASP.NET MVC Application</p>
-                </div>
-            </div>
-        </footer>
+<head>
+    <meta charset="utf-8">
+    <title>@ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    
+    <!-- Must be at the top of head, loads fonts -->
+    @*<script type="text/javascript" src="//use.typekit.net/ykm7bho.js"></script>
+    <script type="text/javascript">try { Typekit.load(); } catch (e) { }</script>*@
 
-        @Scripts.Render("~/bundles/jquery")
-        @RenderSection("scripts", required: false)
-    </body>
+    <!-- Le styles -->
+    @Styles.Render("~/Content/styles")
+    
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="~/favicon.ico">
+
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+
+<body>
+    @Html.Partial("_Navigation")
+
+    <div class="jumbotron">
+        <div class="container">
+            @RenderSection("subhead", required: false)
+            <ul class="nav nav-pills pull-right">
+                @RenderSection("SubNav", required: false)
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+        <header>
+            @if (!string.IsNullOrWhiteSpace(ViewBag.ErrorMessage))
+            {
+                <div class="alert alert-error">
+                    <button type="button" class="close" data-dismiss="alert">×</button>
+                    @ViewBag.ErrorMessage
+                </div>
+            }
+            
+            @if (!string.IsNullOrWhiteSpace(TempData["Message"] as string))
+            {
+                <div class="alert alert-info">
+                    <button type="button" class="close" data-dismiss="alert">×</button>
+                    @TempData["Message"]
+                </div>
+            }
+        </header>
+        
+        <div class="container">
+            @RenderBody()
+        </div>
+
+
+        <hr>
+        <footer>
+            <p>&copy; College of Agricultural and Environmental Sciences, University of California at Davis</p>
+        </footer>
+    </div>
+    
+    @Html.Partial("_ServiceMessages")
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("AdditionalScripts", required: false)
+    
+    <script>
+        $(function () {
+            //Choose the active link depending on your current controller
+            var controller = '@ViewContext.RouteData.Values["controller"].ToString().ToLower()';
+            $("#nav-" + controller).addClass("active");
+        })
+    </script>
+</body>
 </html>

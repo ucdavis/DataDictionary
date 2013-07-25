@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.Title = "Display Form";
+}
+
+@section SubNav {
+    <li>@Html.ActionLink("Sample Index", "Index")</li>
+    <li>@Html.ActionLink("Form", "Form")</li>
+    <li>@Html.ActionLink("Table", "Table")</li>
+    <li>@Html.ActionLink("Data Tables", "DataTable")</li>
+    <li class="active">@Html.ActionLink("Display Form", "DisplayForm")</li>
+}
+
+@section subhead
+{
+    <h1>Display Form Example</h1>
+
+    <div>
+        <p>This is an example of a page that displays some object or infomation</p>
+    </div>
+}
+
+<div class="form-horizontal well-small">
+    <fieldset>
+        <legend>Form info</legend>
+        <div class="control-group">
+            <label class="control-label">Name</label>
+            <div class="controls form-text">Bob Dobalina</div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Email</label>
+            <div class="controls form-text">bdobalina@gmail.com</div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Phone</label>
+            <div class="controls form-text">530-555-5231</div>
+        </div>
+    </fieldset>
+</div>
