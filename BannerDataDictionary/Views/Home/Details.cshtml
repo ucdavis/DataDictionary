@@ -23,7 +23,7 @@
 @section subnav
 {
     <li>@Html.ActionLink("Table Listing", "Index", "Home")</li>
-    <li class="active">@Html.ActionLink("Table Details", "Details", "Home",null, new {id=@Model.TableName})</li>
+    <li class="active">@Html.ActionLink("Table Details", "Details", "Home", null, new { id = @Model.TableName })</li>
 }
 
 @section AdditionalScripts
@@ -60,20 +60,51 @@
     </thead>
     <tbody>
        
-    @foreach (var item in Model.Columns)
-    {
+        @foreach (var item in Model.Columns)
+        {
+            <tr>
+                @*<td></td>*@
+                <td>@item.ColumnId</td>
+                <td>@item.ColumnName</td>
+                <td>@item.ColumnComments</td>
+                <td>@item.DataType</td>
+                <td>@item.DataLength</td>
+                <td>@item.DataPrecision</td>
+                <td>@item.DataScale</td>
+                <td>@item.Nullable</td>
+                @*<td></td>*@
+            </tr>
+        }
+    </tbody>
+</table>
+<hr/>
+<h3>Indexes</h3>
+<table class="table table-striped table-bordered table-hover">
+    <thead>
         <tr>
-            @*<td></td>*@
-            <td>@item.ColumnId</td>
-            <td>@item.ColumnName</td>
-            <td>@item.ColumnComments</td>
-            <td>@item.DataType</td>
-            <td>@item.DataLength</td>
-            <td>@item.DataPrecision</td>
-            <td>@item.DataScale</td>
-            <td>@item.Nullable</td>
-            @*<td></td>*@
-        </tr>
+            <th>Index Name</th>
+            <th>Column Name</th>
+            <th>Uniqueness</th>
+            <th>Distinct Keys</th>
+       </tr>
+    </thead>
+    <tbody>
+       
+        @foreach (var item in Model.Indexes)
+        {
+            <tr>
+                <td>@item.IndexName</td>
+                <td>
+                    <table>
+                        @foreach (var column in item.Columns)
+                        {
+                            <tr><td>@column.ColumnName</td></tr>
+                        }
+                    </table>
+                </td>
+                <td>@item.Uniqueness</td>
+                <td>@item.DistinctKeys</td>
+            </tr>
         }
     </tbody>
 </table>

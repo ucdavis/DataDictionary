@@ -17,7 +17,7 @@ namespace BannerDataDictionary.Models
         public String NumRows { get; set; }
     }
 
-    public class Columns
+    public class Column
     {
         public String Owner { get; set; }
         public String TableName { get; set; }
@@ -31,4 +31,51 @@ namespace BannerDataDictionary.Models
         public String ColumnId { get; set; }
     }
 
+    public class SimpleColumn
+    {
+        public String ColumnName { get; set; }
+        public String ColumnPosition { get; set; }
+    }
+
+    public class Index
+    {
+        public String IndexName { get; set; }
+        public String ColumnName { get; set; }
+        public String SortOrder { get; set; }
+        public String Uniqueness { get; set; }
+        public String DistinctKeys { get; set; }
+    }
+
+    public class DapperIndex
+    {
+        public String IndexName { get; set; }
+        public String Owner { get; set; }
+        public String TableName { get; set; }
+        public String ColumnName { get; set; }
+        public String ColumnPosition { get; set; }
+        public String SortOrder { get; set; }
+        public String Uniqueness { get; set; }
+        public String DistinctKeys { get; set; }
+    }
+
+    public class Constraint
+    {
+        public String ConstraintName { get; set; }
+        public String Owner { get; set; }
+        public String TableName { get; set; }
+        public IList<SimpleColumn> Columns { get; set; }
+        public String Status { get; set; }
+        public String ConstraintType { get; set; }
+    }
+
+    public class DapperConstraint
+    {
+        public String ConstraintName { get; set; }
+        public String Owner { get; set; }
+        public String TableName { get; set; }
+        public String ColumnName { get; set; }
+        public String ColumnPosition { get; set; }
+        public String Status { get; set; }
+        public String ConstraintType { get; set; }
+    }
 }
