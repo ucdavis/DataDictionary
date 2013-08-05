@@ -32,12 +32,23 @@
 
     <script type="text/javascript">
         $(function () {
-            $(".table").dataTable({
+            var oTable = $(".table").dataTable({
                 "aaSorting": [[0, "asc"]], //Default sort on second column
                 //"aoColumnDefs": [
                 //    //{ 'bSortable': false, 'aTargets': [0, 5] } //Disables sort on icon columns
                 //]
             });
+            var oTable2 = $('#IndexTable').dataTable({
+                "bSort": false,
+                "bPaginate": false,
+                "bInfo":false           
+            });
+            var oTable3 = $('#ConstraintTable').dataTable({
+                "bSort": false,
+                "bPaginate": false,
+                "bInfo": false
+            });
+
         });
     </script>
     
@@ -79,31 +90,58 @@
 </table>
 <hr/>
 <h3>Indexes</h3>
-<table class="table table-striped table-bordered table-hover">
+<table id="IndexTable" class="table-bordered table-striped">
     <thead>
         <tr>
+            <th>Position</th>
             <th>Index Name</th>
             <th>Column Name</th>
             <th>Uniqueness</th>
             <th>Distinct Keys</th>
-       </tr>
+            <th>Sort Order</th>
+        </tr>
     </thead>
     <tbody>
        
         @foreach (var item in Model.Indexes)
         {
             <tr>
+                <td>@item.ColumnPosition</td>
                 <td>@item.IndexName</td>
                 <td>
-                    <table>
-                        @foreach (var column in item.Columns)
-                        {
-                            <tr><td>@column.ColumnName</td></tr>
-                        }
-                    </table>
+                    @item.ColumnName
                 </td>
                 <td>@item.Uniqueness</td>
                 <td>@item.DistinctKeys</td>
+                <td>@item.SortOrder</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<hr/>
+<h3>Constraints</h3>
+<table id="ConstraintTable" class="table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Position</th>
+            <th>Constraint Name</th>
+            <th>Column Name</th>
+            <th>Constraint Type</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+       
+        @foreach (var item in Model.Constraints)
+        {
+            <tr>
+                <td>@item.ColumnPosition</td>
+                <td>@item.ConstraintName</td>
+                <td>
+                    @item.ColumnName
+                </td>
+                <td>@item.ConstraintType</td>
+                <td>@item.Status</td>
             </tr>
         }
     </tbody>

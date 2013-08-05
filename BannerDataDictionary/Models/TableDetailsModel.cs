@@ -13,6 +13,6 @@ namespace BannerDataDictionary.Models
         public string NumRows { get; set; }
         public IList<Column> Columns { get; set; }
         public IList<DapperIndex> Indexes { get; set; }
-        public IList<Constraint> Constraints { get; set; } 
+        public IList<DapperConstraint> Constraints { get; set; } 
     }
 }

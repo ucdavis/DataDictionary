@@ -34,9 +34,11 @@ namespace BannerDataDictionary.Controllers
                 IEnumerable<Table> tables = conn.Query<Table>(@"EXEC usp_GetBannerTableNamesAndComments @TableNames = '" + id + "'");
                 IEnumerable<Column> columnsList = conn.Query<Column>(@"EXEC usp_GetBannerColumnNamesCommentsAndDataTypes @TableNames = '" + id + "'");
 
-                IEnumerable<DapperIndex> dapperIndexes = conn.Query<DapperIndex>(@"EXEC usp_GetBannerIndexColumnNamesForTable @TableName = '" + id + "'");
+                // This returns a list of index columns for every index.
+                IEnumerable<DapperIndex> dapperIndexColumns = conn.Query<DapperIndex>(@"EXEC usp_GetBannerIndexColumnNamesForTable @TableName = '" + id + "'");
 
-
+                // This returns a list of constraint columns for every constraint.
+                IEnumerable<DapperConstraint> dapperConstraintColumns = conn.Query<DapperConstraint>(@"EXEC usp_GetBannerConstraintColumnNamesForTable @TableName = '" + id + "'");
 
                 var firstOrDefault = tables.FirstOrDefault();
                 if (firstOrDefault != null)
@@ -48,50 +50,78 @@ namespace BannerDataDictionary.Controllers
                 }
                 viewModel.Columns = columnsList.ToList();
                 
+                //Indexes:
                 viewModel.Indexes = new List<DapperIndex>();
-                var dapperIndices = dapperIndexes as IList<DapperIndex> ?? dapperIndexes.ToList();
-                var result =
-                    dapperIndices.Select(
-                        idx =>
-                        new DapperIndex
-                            {
-                                IndexName = idx.IndexName,
-                                Owner = idx.Owner,
-                                TableName = idx.TableName,
-                                Uniqueness = idx.Uniqueness,
-                                ColumnName = idx.ColumnName,
-                                ColumnPosition = idx.ColumnPosition,
-                                DistinctKeys = idx.DistinctKeys,
-                                SortOrder = idx.SortOrder
-                            });
-
-                foreach (var namedIndex in result)
-                {
-                    viewModel.Indexes.Add(namedIndex);
-
-                    var columns = dapperIndexes.Select(col => new DapperIndex
+                var distinctIndexes =
+                    dapperIndexColumns.GroupBy(idx => idx.IndexName,(key, group) => group.First()).Select(
+                    col => new DapperIndex
                         {
-                            IndexName = string.Empty,
+                            IndexName = col.IndexName,
                             Owner = col.Owner,
-                            Uniqueness = string.Empty,
-                            ColumnName = col.ColumnName,
-                            ColumnPosition = col.ColumnPosition,
-                            DistinctKeys = string.Empty,
-                            SortOrder = col.SortOrder
-                        })
-                                               .Where(
-                                                   x =>
-                                                   x.IndexName == namedIndex.IndexName && x.Owner == namedIndex.Owner &&
-                                                   x.TableName == namedIndex.TableName)
-                                               .OrderBy(y => y.ColumnPosition);
+                            TableName = col.TableName,
+                            Uniqueness = col.Uniqueness,
+                            ColumnName = string.Empty ,
+                            ColumnPosition = string.Empty,
+                            DistinctKeys = col.DistinctKeys,
+                            SortOrder = string.Empty
+                        }).ToList();
 
+                foreach (var distinctIndex in distinctIndexes)
+                {
+                    viewModel.Indexes.Add(distinctIndex);
 
-                    foreach (var dapperIndex in columns)
+                    var indexColumns = dapperIndexColumns.Where(x => (x.IndexName == distinctIndex.IndexName)).ToList();
+                    foreach (var indexColumn in indexColumns)
                     {
-                        viewModel.Indexes.Add(dapperIndex);
+                        viewModel.Indexes.Add(new DapperIndex
+                            {
+                                IndexName = string.Empty,
+                                Owner = indexColumn.Owner,
+                                TableName = indexColumn.TableName,
+                                Uniqueness = string.Empty,
+                                ColumnName = indexColumn.ColumnName,
+                                ColumnPosition = indexColumn.ColumnPosition,
+                                DistinctKeys = string.Empty,
+                                SortOrder = indexColumn.SortOrder
+                            });
                     }
                 }
-                
+
+                // Constraints:
+                viewModel.Constraints = new List<DapperConstraint>();
+                var distinctConstraints =
+                    dapperConstraintColumns.GroupBy(cnstrnt => cnstrnt.ConstraintName, (key, group) => group.First()).Select(
+                    col => new DapperConstraint()
+                    {
+                        ConstraintName = col.ConstraintName,
+                        Owner = col.Owner,
+                        TableName = col.TableName,
+                        ColumnName = string.Empty,
+                        ColumnPosition = string.Empty,
+                        ConstraintType = col.ConstraintType,
+                        Status =col.Status
+                    }).ToList();
+
+                foreach (var constraint in distinctConstraints)
+                {
+                    viewModel.Constraints.Add(constraint);
+
+                    var constraintColumns =
+                        dapperConstraintColumns.Where(x => (x.ConstraintName == constraint.ConstraintName)).ToList();
+                    foreach (var constraintColumn in constraintColumns)
+                    {
+                        viewModel.Constraints.Add(new DapperConstraint()
+                            {
+                                ConstraintName = string.Empty,
+                                Owner = constraintColumn.Owner,
+                                TableName = constraintColumn.TableName,
+                                ColumnName = constraintColumn.ColumnName,
+                                ColumnPosition = constraintColumn.ColumnPosition,
+                                ConstraintType = string.Empty,
+                                Status = string.Empty
+                            });
+                    }
+                }
 
                 return View(viewModel);
             }
