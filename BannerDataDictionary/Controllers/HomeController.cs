@@ -35,10 +35,10 @@ namespace BannerDataDictionary.Controllers
                 IEnumerable<Column> columnsList = conn.Query<Column>(@"EXEC usp_GetBannerColumnNamesCommentsAndDataTypes @TableNames = '" + id + "'");
 
                 // This returns a list of index columns for every index.
-                IEnumerable<DapperIndex> dapperIndexColumns = conn.Query<DapperIndex>(@"EXEC usp_GetBannerIndexColumnNamesForTable @TableName = '" + id + "'");
+                IEnumerable<DapperIndex> dapperIndexColumns = conn.Query<DapperIndex>(@"EXEC usp_GetBannerIndexColumnNames @TableNames = '" + id + "'");
 
                 // This returns a list of constraint columns for every constraint.
-                IEnumerable<DapperConstraint> dapperConstraintColumns = conn.Query<DapperConstraint>(@"EXEC usp_GetBannerConstraintColumnNamesForTable @TableName = '" + id + "'");
+                IEnumerable<DapperConstraint> dapperConstraintColumns = conn.Query<DapperConstraint>(@"EXEC usp_GetBannerConstraintColumnNames @TableNames = '" + id + "'");
 
                 var firstOrDefault = tables.FirstOrDefault();
                 if (firstOrDefault != null)
