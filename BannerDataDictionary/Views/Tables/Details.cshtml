@@ -1,4 +1,5 @@
-﻿@model BannerDataDictionary.Models.TableDetailsModel
+@using System.Xml.Linq
+@model BannerDataDictionary.Models.TableDetailsModel
 
 @{
     ViewBag.Title = "Table Details";
@@ -12,9 +13,27 @@
     <h1>@ViewBag.Message</h1>
 
     <div>
-        <h2>Banner.@Model.Owner.@Model.TableName</h2>
+        <h2>@Model.LinkedServerName.@Model.Owner.@Model.TableName</h2>
          <h5>
-             <p>@Model.TableComments</p>
+             <p>@if (@Model.TableComments != null && @Model.TableComments.Contains("<cmt>"))
+                    {
+                        <ul>
+                            @{
+                        var myDoc = XDocument.Parse(@Model.TableComments);
+                        foreach (var node in myDoc.Descendants().Where(x => x.Name != "cmt"))
+                        {
+                                    <li>
+                                    <strong>@node.Name.ToString().ToUpper():</strong> @node.Value 
+                                    </li>
+                        }
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        @Model.TableComments
+                    }
+                </p>
              @*<p>Comments...</p>*@
              <p>Num Rows: @Model.NumRows</p>
     </h5>	
@@ -23,8 +42,8 @@
 
 @section subnav
 {
-    <li>@Html.ActionLink("Table Listing", "Index", "Home")</li>
-    <li class="active">@Html.ActionLink("Table Details", "Details", "Home", null, new { id = @Model.TableName })</li>
+    <li>@Html.ActionLink("Table Listing", "Index", "Tables", new BannerDataDictionary.Models.DatabaseOwner { Owner = @Model.Owner, LinkedServer = @Model.LinkedServerName }, null)</li>
+    <li class="active">@Html.ActionLink("Table Details", "Details", "Tables", new BannerDataDictionary.Models.Table { LinkedServerName = @Model.LinkedServerName, Owner = @Model.Owner, TableName = @Model.TableName }, null)</li>
     <li><a href="#Columns">Columns</a></li>
     <li><a href="#Indexes">Indexes</a></li>
     <li><a href="#Constraints">Constraints</a></li>

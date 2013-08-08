@@ -1,0 +1,63 @@
+﻿@using BannerDataDictionary.Models
+@model IList<BannerDataDictionary.Models.DatabaseOwner>
+@{
+    ViewBag.Title = "Index";
+}
+
+@section subhead
+{
+    <h1>@ViewBag.Message</h1>
+
+    <div>
+        <p>A listing of Oracle Database Owners (Schemas)</p>
+    </div>
+}
+
+@section AdditionalScripts
+{
+   
+}
+@{
+    var linkedServerName = Request.QueryString.Get("Name");
+    var includeEmptyTablesValue = Request.QueryString.Get("IncludeEmptyTables");
+    var includeEmptyTables = false;
+    var includePrefix = "Include";
+    var excludePrefix = "Exclude";
+    var prefix = includePrefix;
+    var invertedIncludeEmptyTables = true;
+
+    if (!String.IsNullOrEmpty(includeEmptyTablesValue))
+    {
+        if (!Boolean.TryParse(includeEmptyTablesValue, out includeEmptyTables))
+        {
+            includeEmptyTables = false;
+        }
+        if (includeEmptyTables)
+        {
+            prefix = excludePrefix;
+            invertedIncludeEmptyTables = false;
+        }
+    }
+}
+ 
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Database Owner (Schema)</th>
+            <th>Number of Tables
+               <i>@Html.ActionLink("(" + prefix + " Empty Tables)", "Index", "Owners", new LinkedServer { Name = linkedServerName, IncludeEmptyTables = invertedIncludeEmptyTables}, null)</i>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink(item.Owner, "Index", "Tables", item, null)
+                </td>
+                <td>@item.NumTables</td>
+            </tr>
+        }
+    </tbody>
+</table>

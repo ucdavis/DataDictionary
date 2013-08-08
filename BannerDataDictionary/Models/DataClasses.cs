@@ -11,6 +11,7 @@ namespace BannerDataDictionary.Models
 
     public class Table
     {
+        public String LinkedServerName { get; set; }
         public String Owner { get; set; }
         public String TableName { get; set; }
         public String Comments { get; set; }
@@ -78,4 +79,26 @@ namespace BannerDataDictionary.Models
         public String Status { get; set; }
         public String ConstraintType { get; set; }
     }
+
+    public class DatabaseOwner
+    {
+        public string LinkedServer { get; set; }
+        public string Owner { get; set; }
+        public string NumTables { get; set; }
+        public bool? IncludeEmptyTables { get; set; }
+
+        public DatabaseOwner()
+        {
+            IncludeEmptyTables = false;
+        }
+    }
+
+    public class LinkedServer
+    {
+        public string Name { get; set; }
+        public IList<DatabaseOwner> DatabaseOwners { get; set; }
+        public bool? IncludeEmptyTables { get; set; }
+    }
 }
+
+

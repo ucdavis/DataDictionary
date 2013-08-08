@@ -1,4 +1,6 @@
-﻿
+@using System.Xml.Linq
+@using BannerDataDictionary.Models
+
 <div id="Columns">
     <div>@Html.Partial("_Spacer")</div>
     <h3>Columns</h3>
@@ -26,13 +28,32 @@
         </thead>
         <tbody>
        
-            @foreach (var item in Model.Columns)
+            @foreach (Column item in Model.Columns)
             {
                 <tr>
                     @*<td></td>*@
                     <td>@item.ColumnId</td>
                     <td>@item.ColumnName</td>
-                    <td>@item.ColumnComments</td>
+                    <td>@if (@item.ColumnComments != null && @item.ColumnComments.Contains("<cmt>"))
+                    {
+                        <ul>
+                            @{
+                                var myDoc = XDocument.Parse(@item.ColumnComments);
+                                foreach (var node in myDoc.Descendants().Where(x => x.Name != "cmt"))
+                                {
+                                    <li>
+                                    <strong>@node.Name.ToString().ToUpper():</strong> @node.Value 
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        @item.ColumnComments
+                    }
+                </td>
+                   
                     <td>@item.DataType</td>
                     <td>@item.DataLength</td>
                     <td>@item.DataPrecision</td>

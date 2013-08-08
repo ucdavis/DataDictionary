@@ -7,6 +7,7 @@ namespace BannerDataDictionary.Models
 {
     public class TableDetailsModel
     {
+        public string LinkedServerName { get; set; }
         public string TableName { get; set; }
         public string Owner { get; set; }
         public string TableComments { get; set; }
