@@ -43,9 +43,10 @@
 <table class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
+            <th>Linked Server</th>
             <th>Database Owner (Schema)</th>
             <th>Number of Tables
-               <i>@Html.ActionLink("(" + prefix + " Empty Tables)", "Index", "Owners", new LinkedServer { Name = linkedServerName, IncludeEmptyTables = invertedIncludeEmptyTables}, null)</i>
+                <i>@Html.ActionLink("(" + prefix + " Empty Tables)", "Index", "Owners", new LinkedServer { Name = linkedServerName, IncludeEmptyTables = invertedIncludeEmptyTables}, null)</i>
             </th>
         </tr>
     </thead>
@@ -53,6 +54,9 @@
         @foreach (var item in Model)
         {
             <tr>
+                <td>
+                    @item.LinkedServerName
+                </td>
                 <td>
                     @Html.ActionLink(item.Owner, "Index", "Tables", item, null)
                 </td>

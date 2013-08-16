@@ -42,7 +42,7 @@
 
 @section subnav
 {
-    <li>@Html.ActionLink("Table Listing", "Index", "Tables", new BannerDataDictionary.Models.DatabaseOwner { Owner = @Model.Owner, LinkedServer = @Model.LinkedServerName }, null)</li>
+    <li>@Html.ActionLink("Table Listing", "Index", "Tables", new BannerDataDictionary.Models.DatabaseOwner { Owner = @Model.Owner, LinkedServerName = @Model.LinkedServerName }, null)</li>
     <li class="active">@Html.ActionLink("Table Details", "Details", "Tables", new BannerDataDictionary.Models.Table { LinkedServerName = @Model.LinkedServerName, Owner = @Model.Owner, TableName = @Model.TableName }, null)</li>
     <li><a href="#Columns">Columns</a></li>
     <li><a href="#Indexes">Indexes</a></li>

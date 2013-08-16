@@ -16,6 +16,7 @@ namespace BannerDataDictionary.Models
         public String TableName { get; set; }
         public String Comments { get; set; }
         public String NumRows { get; set; }
+        public String TableType { get; set; }
     }
 
     public class Column
@@ -82,7 +83,7 @@ namespace BannerDataDictionary.Models
 
     public class DatabaseOwner
     {
-        public string LinkedServer { get; set; }
+        public string LinkedServerName { get; set; }
         public string Owner { get; set; }
         public string NumTables { get; set; }
         public bool? IncludeEmptyTables { get; set; }

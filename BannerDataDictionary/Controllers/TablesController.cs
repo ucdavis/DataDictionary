@@ -23,22 +23,39 @@ namespace BannerDataDictionary.Controllers
         //    }
         //}
 
-        // id = DatabaseOwner
-        public ActionResult Index(DatabaseOwner id)
+        // id = LinkedServer
+        public ActionResult Index(DatabaseOwner oid)
         {
-            if (id == null)
+            if (oid == null)
             {
                 ViewBag.Message = "Error: Must provide a Linked Server and Database Owner";
-                return RedirectToAction("Index", "Home", new { Message = "Must Select a Linked Server to continue!" });
+                return RedirectToAction("Index", "Home", new {Message = "Must Select a Linked Server to continue!"});
             }
             else
             {
-                var includeEmptyTables = id.IncludeEmptyTables ?? false; 
-                var linkedServerName = id.LinkedServer as string ?? "SIS";
-                var databaseOwnerName = id.Owner as string ?? "SATURN";
+                var id = new LinkedServer();
+                var includeEmptyTables = oid.IncludeEmptyTables ?? false;
+                var linkedServerName = oid.LinkedServerName as string ?? "SIS";
+                //var databaseOwners = oid.Owner //as List<DatabaseOwner>;
+                var databaseOwnerName = oid.Owner ?? "SATURN";
+
+                //if (databaseOwners == null || !databaseOwners.Any())
+                //{
+                //    databaseOwners = new List<DatabaseOwner>
+                //        {
+                //            new DatabaseOwner {LinkedServerName = linkedServerName, Owner = databaseOwnerName}
+                //        };
+                //}
+                //else
+                //{
+                //    databaseOwners = id.DatabaseOwners as List<DatabaseOwner>;
+                //    var first = databaseOwners.FirstOrDefault();
+                //    if (first != null) databaseOwnerName = first.Owner;
+                //}
 
                 var message = " Tables";
-                if (String.IsNullOrEmpty(databaseOwnerName))
+                //if (databaseOwners.First().Owner.Equals("SATURN"))
+                if (databaseOwnerName.Equals("SATURN"))
                 {
                     message = "Banner" + message;
                 }
@@ -52,8 +69,8 @@ namespace BannerDataDictionary.Controllers
                 {
                     conn.Open();
                     IList<Table> tables =
-                        conn.Query<Table>(@"EXEC usp_GetOracleTableNamesAndComments @Owners = '" + databaseOwnerName +
-                                          "', @LinkedServerName = '" + linkedServerName + "', @IncludeEmptyTables = " + includeEmptyTables).ToList();
+                        conn.Query<Table>(@"EXEC usp_GetLinkedServerTableNamesAndComments @Owners = '" + databaseOwnerName +
+                                          "', @LinkedServerNames = '" + linkedServerName + "', @IncludeEmptyTables = " + includeEmptyTables).ToList();
                     return View(tables);
                 }
             }
@@ -75,14 +92,14 @@ namespace BannerDataDictionary.Controllers
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["MainDb"].ConnectionString))
             {
                 conn.Open();
-                IList<Table> tables = conn.Query<Table>(@"EXEC usp_GetOracleTableNamesAndComments @TableNames = '" + tableName + "', @LinkedServerName = '" + linkedServerName + "', @Owners = '" + databaseOwner + "'").ToList();
-                IList<Column> columnsList = conn.Query<Column>(@"EXEC usp_GetOracleColumnNamesCommentsAndDataTypes @TableNames = '" + tableName + "', @LinkedServerName = '" + linkedServerName + "', @Owners = '" + databaseOwner + "'").ToList();
+                IList<Table> tables = conn.Query<Table>(@"EXEC usp_GetLinkedServerTableNamesAndComments @TableNames = '" + tableName + "', @LinkedServerNames = '" + linkedServerName + "', @Owners = '" + databaseOwner + "'").ToList();
+                IList<Column> columnsList = conn.Query<Column>(@"EXEC usp_GetLinkedServerColumnNamesCommentsAndDataTypes @TableNames = '" + tableName + "', @LinkedServerNames = '" + linkedServerName + "', @Owners = '" + databaseOwner + "'").ToList();
 
                 // This returns a list of index columns for every index.
-                IList<DapperIndex> dapperIndexColumns = conn.Query<DapperIndex>(@"EXEC usp_GetOracleIndexColumnNames @TableNames = '" + tableName + "', @LinkedServerName = '" + linkedServerName + "', @Owners = '" + databaseOwner + "'").ToList();
+                IList<DapperIndex> dapperIndexColumns = conn.Query<DapperIndex>(@"EXEC usp_GetLinkedServerIndexColumnNames @TableNames = '" + tableName + "', @LinkedServerNames = '" + linkedServerName + "', @Owners = '" + databaseOwner + "'").ToList();
 
                 // This returns a list of constraint columns for every constraint.
-                IList<DapperConstraint> dapperConstraintColumns = conn.Query<DapperConstraint>(@"EXEC usp_GetBannerConstraintColumnNames @TableNames = '" + tableName + "', @LinkedServerName = '" + linkedServerName + "', @Owners = '" + databaseOwner + "'").ToList();
+                IList<DapperConstraint> dapperConstraintColumns = conn.Query<DapperConstraint>(@"EXEC usp_GetLinkedServerConstraintColumnNames @TableNames = '" + tableName + "', @LinkedServerNames = '" + linkedServerName + "', @Owners = '" + databaseOwner + "'").ToList();
 
                 var firstOrDefault = tables.FirstOrDefault();
                 if (firstOrDefault != null)
@@ -90,7 +107,7 @@ namespace BannerDataDictionary.Controllers
                     viewModel.Owner = firstOrDefault.Owner;
                     viewModel.TableComments = firstOrDefault.Comments ?? String.Empty;
                     viewModel.NumRows = firstOrDefault.NumRows;
-                    
+                    viewModel.TableType = firstOrDefault.TableType;
                 }
                 viewModel.Columns = columnsList.ToList();
                 
