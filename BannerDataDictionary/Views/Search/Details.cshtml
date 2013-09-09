@@ -1,0 +1,150 @@
+﻿@using System.Xml.Linq
+@model IList<BannerDataDictionary.Models.SearchResult>
+@{
+    ViewBag.Title = "Search Details";
+}
+
+@Styles.Render("~/Content/DataTables-1.9.4/media/css/dataTables")
+
+@section subhead
+{
+    <h1>@ViewBag.Message</h1>
+
+    <div>
+        <p>Tables, Columns or Comments matching search criteria</p>
+       
+       @* @{
+                var linkedServerName = Request.QueryString.Get("Name");
+                var includeEmptyTablesValue = Request.QueryString.Get("IncludeEmptyTables");
+                var includeEmptyTables = false;
+                var includePrefix = "Include";
+                var excludePrefix = "Exclude";
+                var prefix = includePrefix;
+                var invertedIncludeEmptyTables = true;
+
+                if (!String.IsNullOrEmpty(includeEmptyTablesValue))
+                {
+                    if (!Boolean.TryParse(includeEmptyTablesValue, out includeEmptyTables))
+                    {
+                        includeEmptyTables = false;
+                    }
+                    if (includeEmptyTables)
+                    {
+                        prefix = excludePrefix;
+                        invertedIncludeEmptyTables = false;
+                    }
+                }
+
+                <i>
+                    @Html.ActionLink("(" + prefix + " Empty Tables)", "Index", "Tables",
+                    new BannerDataDictionary.Models.DatabaseOwner
+                    {
+                        LinkedServerName = @Request.QueryString.Get("LinkedServerName"),
+                        Owner = @Request.QueryString.Get("Owner"),
+                        IncludeEmptyTables = invertedIncludeEmptyTables,
+                        NumTables = @Request.QueryString.Get("NumTables")
+                    }, null)
+                </i>
+        }*@
+       
+    </div>
+}
+
+@*@section subnav
+{
+    <li>@Html.ActionLink("Sample Index", "Index")</li>
+    <li>@Html.ActionLink("Form", "Form")</li>
+    <li>@Html.ActionLink("Table", "Table")</li>
+    <li class="active">@Html.ActionLink("Data Tables", "DataTable")</li>
+    <li>@Html.ActionLink("Display Form", "DisplayForm")</li>
+}*@
+
+@section AdditionalScripts
+{
+    @Scripts.Render("~/bundles/datatables")
+
+    <script type="text/javascript">
+        $(function() {
+            $(".table").dataTable({
+                "bAutoWidth": false,
+                "sScrollX": "100%", 
+                "sScrollXInner": "200%",
+                "aoColumns": [{ "sWidth": "5%" }, { "sWidth": "5%" }, { "sWidth": "5%" }, { "sWidth": "30%" }, { "sWidth": "15%" }, { "sWidth": "30%" }, { "sWidth": "5%" }, { "sWidth": "5%" }],
+                "aaSorting": [[1,
+                "asc"]], //Default sort on second column
+                //"aoColumnDefs": [
+                //    { 'bSortable': false, 'aTargets': [0] } //Disables sort on icon columns
+                //]
+            });
+        });
+    </script>
+    
+}
+
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Linked Server</th>
+            <th>Owner</th>
+            <th>Table Name</th>
+            <th>Comments</th>
+            <th>Column Name</th>
+            <th>Column Comments</th>
+            <th>Num Rows</th>
+            <th>Table Type</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.LinkedServerName</td>
+                <td>@item.Owner</td>
+                <td>@Html.ActionLink(item.TableName, "Details", "Tables", new BannerDataDictionary.Models.Table { LinkedServerName = item.LinkedServerName, Owner = item.Owner, TableName = item.TableName }, null)</td>
+                <td>@if (@item.Comments != null && @item.Comments.Contains("<cmt>"))
+                    {
+                        <ul>
+                            @{
+                                var myDoc = XDocument.Parse(@item.Comments);
+                                foreach (var node in myDoc.Descendants().Where(x => x.Name != "cmt"))
+                                {
+                                
+                                    <li>
+                                        <strong>@node.Name.ToString().ToUpper():</strong> @node.Value 
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        @item.Comments
+                    }
+                </td>
+                <td>@item.ColumnName</td>
+               <td>@if (@item.ColumnComments != null && @item.ColumnComments.Contains("<cmt>"))
+                   {
+                   <ul>
+                       @{
+                       var myDoc = XDocument.Parse(@item.ColumnComments);
+                        foreach (var node in myDoc.Descendants().Where(x => x.Name != "cmt"))
+                            {
+                                
+                           <li>
+                               <strong>@node.Name.ToString().ToUpper():</strong> @node.Value
+                           </li>
+                            }
+                       }
+                   </ul>
+                    }
+                    else
+                    {
+                        @item.ColumnComments
+                    }
+                </td>
+                <td>@item.NumRows</td>
+                <td>@item.TableType</td>
+            </tr>
+        }
+    </tbody>
+</table>

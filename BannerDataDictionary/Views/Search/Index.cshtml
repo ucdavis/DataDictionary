@@ -1,0 +1,33 @@
+﻿
+@{
+    ViewBag.Title = "Search";
+}
+
+@section subhead
+{
+    <h1>@ViewBag.Message</h1>
+
+    <div>
+        <p>Search for Tables, Columns or Comments matching the search string provided</p>
+    </div>
+}
+      
+@using (Html.BeginForm("Details", "Search"))
+{
+    @Html.AntiForgeryToken();
+    <fieldset>
+        <legend>Search Form</legend>
+        <p>
+            Enter any text string or substring that can be part of the Table Name, Column Name, or be present in the comment fields.
+        </p>
+        <ol>
+            <li class="name">
+                @Html.Label("Enter some text to search for:")
+                @Html.TextBox("searchString")
+              
+            </li>
+        </ol>
+        <input type="submit" value="Search" />
+    </fieldset>
+
+}

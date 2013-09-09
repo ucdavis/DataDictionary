@@ -100,6 +100,18 @@ namespace BannerDataDictionary.Models
         public IList<DatabaseOwner> DatabaseOwners { get; set; }
         public bool? IncludeEmptyTables { get; set; }
     }
+
+    public class SearchResult
+    {
+        public string LinkedServerName { get; set; }
+        public string Owner { get; set; }
+        public string TableName { get; set; }
+        public string Comments { get; set; }
+        public string ColumnName { get; set; }
+        public string ColumnComments { get; set; }
+        public int NumRows { get; set; }
+        public string TableType { get; set; }
+    }
 }
 
 
