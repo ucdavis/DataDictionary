@@ -29,7 +29,8 @@ namespace BannerDataDictionary.Controllers
                 using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["MainDb"].ConnectionString))
                 {
                     conn.Open();
-                    IList<DatabaseOwner> databaseOwners = conn.Query<DatabaseOwner>(@"EXEC usp_GetLinkedServerDatabaseOwnersAndTableCount @LinkedServerNames ='" + linkedServerName + "', @IncludeEmptyTables = " + includeEmptyTables).ToList();
+                    //IList<DatabaseOwner> databaseOwners = conn.Query<DatabaseOwner>(@"EXEC usp_GetLinkedServerDatabaseOwnersAndTableCount @LinkedServerNames ='" + linkedServerName + "', @IncludeEmptyTables = " + includeEmptyTables).ToList();
+                    IList<DatabaseOwner> databaseOwners = conn.Query<DatabaseOwner>(@"EXEC usp_GetLinkedServerDatabaseOwnersAndTableCount @LinkedServerNames = @linkedServerName, @IncludeEmptyTables = @includeEmptyTables", new { @linkedServerName = linkedServerName, @includeEmptyTables = includeEmptyTables }).ToList();
 
                     return View(databaseOwners);
                 }

@@ -69,8 +69,10 @@ namespace BannerDataDictionary.Controllers
                 {
                     conn.Open();
                     IList<Table> tables =
-                        conn.Query<Table>(@"EXEC usp_GetLinkedServerTableNamesAndComments @Owners = '" + databaseOwnerName +
-                                          "', @LinkedServerNames = '" + linkedServerName + "', @IncludeEmptyTables = " + includeEmptyTables).ToList();
+                        conn.Query<Table>(@"EXEC usp_GetLinkedServerTableNamesAndComments 
+                            @Owners = @databaseOwnerName, 
+                            @LinkedServerNames = @linkedServerName, 
+                            @IncludeEmptyTables = @includeEmptyTables", new { @databaseOwnerName = databaseOwnerName, @linkedServerName = linkedServerName, @includeEmptyTables = includeEmptyTables}).ToList();
                     return View(tables);
                 }
             }
@@ -96,10 +98,10 @@ namespace BannerDataDictionary.Controllers
                 IList<Column> columnsList = conn.Query<Column>(@"EXEC usp_GetLinkedServerColumnNamesCommentsAndDataTypes @TableNames = '" + tableName + "', @LinkedServerNames = '" + linkedServerName + "', @Owners = '" + databaseOwner + "'").ToList();
 
                 // This returns a list of index columns for every index.
-                IList<DapperIndex> dapperIndexColumns = conn.Query<DapperIndex>(@"EXEC usp_GetLinkedServerIndexColumnNames @TableNames = '" + tableName + "', @LinkedServerNames = '" + linkedServerName + "', @Owners = '" + databaseOwner + "'").ToList();
+                IList<DapperIndex> dapperIndexColumns = conn.Query<DapperIndex>(@"EXEC usp_GetLinkedServerIndexColumnNames @TableNames = @tableName, @LinkedServerNames = @linkedServerName, @Owners = @databaseOwner", new { @tableName = tableName, @linkedServerName = linkedServerName, @databaseOwner = databaseOwner}).ToList();
 
                 // This returns a list of constraint columns for every constraint.
-                IList<DapperConstraint> dapperConstraintColumns = conn.Query<DapperConstraint>(@"EXEC usp_GetLinkedServerConstraintColumnNames @TableNames = '" + tableName + "', @LinkedServerNames = '" + linkedServerName + "', @Owners = '" + databaseOwner + "'").ToList();
+                IList<DapperConstraint> dapperConstraintColumns = conn.Query<DapperConstraint>(@"EXEC usp_GetLinkedServerConstraintColumnNames @TableNames = @tableName, @LinkedServerNames = @linkedServerName, @Owners = @databaseOwner", new { @tableName = tableName, @linkedServerName = linkedServerName, @databaseOwner = databaseOwner}).ToList();
 
                 var firstOrDefault = tables.FirstOrDefault();
                 if (firstOrDefault != null)
