@@ -8,7 +8,7 @@
     <h1>@ViewBag.Message</h1>
 
     <div>
-        <p>Search for Tables, Columns or Comments matching the search string provided</p>
+        <p>Search <i>Any</i> Linked Server for Tables, Columns or Comments matching the criteria provided</p>
     </div>
 }
       
@@ -18,11 +18,11 @@
     <fieldset>
         <legend>Search Form</legend>
         <p>
-            Enter any text string or substring that can be part of the Table Name, Column Name, or be present in the comment fields.
+            Enter keyword(s) or text string that can be part of a Table Name, Column Name, or be present in the comment fields.
         </p>
         <ol>
             <li class="name">
-                @Html.Label("Enter some text to search for:")
+                @Html.Label("Enter text or keyword(s) to search for:")
                 @Html.TextBox("searchString")
               
             </li>

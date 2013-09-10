@@ -26,7 +26,7 @@ namespace BannerDataDictionary.Controllers
             {
                 conn.Open();
                 IList<SearchResult> results =
-                    conn.Query<SearchResult>(@"SELECT * FROM udf_GetTableColumnCommentsResults('" + searchString + "')").ToList();
+                    conn.Query<SearchResult>(@"SELECT * FROM dbo.udf_GetTableColumnCommentsResults(@searchString)", new {searchString = @searchString}).ToList();
                 return View(results);
             }
             return View();
