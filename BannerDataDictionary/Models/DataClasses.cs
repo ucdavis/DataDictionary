@@ -24,6 +24,14 @@ namespace BannerDataDictionary.Models
         public String Owner { get; set; }
         public String TableName { get; set; }
         public String ColumnName { get; set; }
+
+        //private string _columnComments;
+        //public String ColumnComments
+        //{
+        //    get { return _columnComments; }
+        //    set { _columnComments = value.Replace("&", "&#38;"); }
+        //}
+
         public String ColumnComments { get; set; }
         public String DataType { get; set; }
         public String DataLength { get; set; }

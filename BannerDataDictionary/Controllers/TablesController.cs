@@ -94,8 +94,8 @@ namespace BannerDataDictionary.Controllers
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["MainDb"].ConnectionString))
             {
                 conn.Open();
-                IList<Table> tables = conn.Query<Table>(@"EXEC usp_GetLinkedServerTableNamesAndComments @TableNames = '" + tableName + "', @LinkedServerNames = '" + linkedServerName + "', @Owners = '" + databaseOwner + "'").ToList();
-                IList<Column> columnsList = conn.Query<Column>(@"EXEC usp_GetLinkedServerColumnNamesCommentsAndDataTypes @TableNames = '" + tableName + "', @LinkedServerNames = '" + linkedServerName + "', @Owners = '" + databaseOwner + "'").ToList();
+                IList<Table> tables = conn.Query<Table>(@"EXEC usp_GetLinkedServerTableNamesAndComments @TableNames = @tableName, @LinkedServerNames = @linkedServerName, @Owners = @databaseOwner", new { @tableName = tableName, @linkedServerName = linkedServerName, @databaseOwner = databaseOwner }).ToList();
+                IList<Column> columnsList = conn.Query<Column>(@"EXEC usp_GetLinkedServerColumnNamesCommentsAndDataTypes @TableNames = @tableName, @LinkedServerNames = @linkedServerName, @Owners = @databaseOwner", new { @tableName = tableName, @linkedServerName = linkedServerName, @databaseOwner = databaseOwner }).ToList();
 
                 // This returns a list of index columns for every index.
                 IList<DapperIndex> dapperIndexColumns = conn.Query<DapperIndex>(@"EXEC usp_GetLinkedServerIndexColumnNames @TableNames = @tableName, @LinkedServerNames = @linkedServerName, @Owners = @databaseOwner", new { @tableName = tableName, @linkedServerName = linkedServerName, @databaseOwner = databaseOwner}).ToList();

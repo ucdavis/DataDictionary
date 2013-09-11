@@ -38,14 +38,28 @@
                     {
                         <ul>
                             @{
-                                var myDoc = XDocument.Parse(@item.ColumnComments);
-                                foreach (var node in myDoc.Descendants().Where(x => x.Name != "cmt"))
-                                {
-                                    <li>
-                                    <strong>@node.Name.ToString().ToUpper():</strong> @node.Value 
-                                    </li>
-                                }
-                            }
+                           try
+                           {
+                               var myDoc = XDocument.Parse(@item.ColumnComments);
+                               foreach (var node in myDoc.Descendants().Where(x => x.Name != "cmt"))
+                               {
+                                   <li>
+                                       <strong>@node.Name.ToString().ToUpper():</strong> @node.Value
+                                   </li>
+                               }
+                           }
+                           catch (System.Xml.XmlException ex)
+                           {
+                               var myDoc = XDocument.Parse(@item.ColumnComments.Replace("&", "&#38;"));
+                           
+                               foreach (var node in myDoc.Descendants().Where(x => x.Name != "cmt"))
+                               {
+                                   <li>
+                                       <strong>@node.Name.ToString().ToUpper():</strong> @node.Value
+                                   </li>
+                               }
+                           }
+                       }
                         </ul>
                     }
                     else

@@ -1,4 +1,4 @@
-﻿
+﻿@model BannerDataDictionary.Models.SearchModel
 @{
     ViewBag.Title = "Search";
 }
@@ -17,17 +17,20 @@
     @Html.AntiForgeryToken();
     <fieldset>
         <legend>Search Form</legend>
+        <p>Select the Linked Server(s) to search against:</p>
+        @*@Html.ListBoxFor(x => x.LinkedServers, new MultiSelectList(Model.LinkedServers, "Name", "Name", Model.SelectedLinkedServers))<br/>*@
+        @Html.ListBoxFor(x => x.SelectedServersNames, Model.Items) <br/>
         <p>
             Enter keyword(s) or text string that can be part of a Table Name, Column Name, or be present in the comment fields.
         </p>
         <ol>
             <li class="name">
-                @Html.Label("Enter text or keyword(s) to search for:")
-                @Html.TextBox("searchString")
-              
+                @Html.LabelFor(x => x.SearchString)
+                @Html.TextBoxFor(x => x.SearchString)
             </li>
         </ol>
+        
         <input type="submit" value="Search" />
     </fieldset>
 
-}
+} <!--End using (Html.BeginForm("Details", "Search")) -->

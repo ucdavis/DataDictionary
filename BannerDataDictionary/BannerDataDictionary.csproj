@@ -239,6 +239,7 @@
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\OwnersModel.cs" />
+    <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Models\TableDetailsModel.cs" />
     <Compile Include="Models\DataClasses.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
