@@ -18,8 +18,9 @@
     <fieldset>
         <legend>Search Form</legend>
         <p>Select the Linked Server(s) to search against:</p>
-        @*@Html.ListBoxFor(x => x.LinkedServers, new MultiSelectList(Model.LinkedServers, "Name", "Name", Model.SelectedLinkedServers))<br/>*@
-        @Html.ListBoxFor(x => x.SelectedServersNames, Model.Items) <br/>
+        
+        @Html.ListBoxFor(x => x.SelectedServerNames, new MultiSelectList(Model.LinkedServers, "Name", "Name"))<br/>
+        @*@Html.ListBoxFor(x => x.SelectedServerNames, Model.Items) <br/>*@
         <p>
             Enter keyword(s) or text string that can be part of a Table Name, Column Name, or be present in the comment fields.
         </p>

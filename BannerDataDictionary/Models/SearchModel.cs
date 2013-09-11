@@ -11,10 +11,9 @@ namespace BannerDataDictionary.Models
     {
         [Display(Name = "Enter text or keyword(s) to search for:")]
         public string SearchString { get; set; }
-        public string[] SelectedServersNames { get; set; }
+        public string[] SelectedServerNames { get; set; } //This is what's populated when a user selects (a) linked server(s).
         public ICollection<LinkedServer> LinkedServers { get; set; }
-        public IEnumerable<SelectListItem> Items { get; set; }
-        
+       
         public SearchModel()
         {
             SearchString = string.Empty;

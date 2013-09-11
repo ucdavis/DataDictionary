@@ -23,46 +23,31 @@ namespace BannerDataDictionary.Controllers
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["MainDb"].ConnectionString))
             {
                 conn.Open();
-                var query = conn.Query<LinkedServer>(@"EXEC usp_GetOracleLinkedServerNames");
-
-                var linkedServers = query as IList<LinkedServer> ?? query.ToList();
-                viewModel.Items = linkedServers.Select(x => new SelectListItem
-                    {
-                        Value = x.Name,
-                        Text = x.Name
-                    });
-                viewModel.LinkedServers = linkedServers.ToList();
+                viewModel.LinkedServers = conn.Query<LinkedServer>(@"EXEC usp_GetOracleLinkedServerNames").ToList();
 
                 return View(viewModel);
             }
         }
 
         [HttpPost]
-       // public ActionResult Details(string searchString)
-       public ActionResult Details(SearchModel model)
+        public ActionResult Details(SearchModel model)
         {
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["MainDb"].ConnectionString))
             {
                 var searchString = model.SearchString;
-                var selectedServerNames = model.SelectedServersNames;
-                var selectedServerNamesConcat = "";
+                var selectedServerNames = model.SelectedServerNames;  //This what's populated when a user selects (a) linked server(s).
+                var selectedServerNamesString = "";
                 if (selectedServerNames != null && selectedServerNames.Any())
                 {
-                    foreach (var name in selectedServerNames)
-                    {
-                        selectedServerNamesConcat += name + ",";
-                    }
-                    selectedServerNamesConcat = selectedServerNamesConcat.Substring(0,
-                                                                                    selectedServerNamesConcat.Length - 1);
+                    selectedServerNamesString = selectedServerNames.Aggregate(selectedServerNamesString, (current, name) => current + (name + ","));
+                    selectedServerNamesString = selectedServerNamesString.Substring(0, selectedServerNamesString.Length - 1);
                 }
-               
-                    conn.Open();
-                IList<SearchResult> results =
-                    conn.Query<SearchResult>(@"SELECT * FROM dbo.udf_GetTableColumnCommentsResults(@searchString, @LinkedServerNames)", new { @searchString = searchString, @LinkedServerNames = selectedServerNamesConcat }).ToList();
+
+                conn.Open();
+                var results =
+                    conn.Query<SearchResult>(@"SELECT * FROM dbo.udf_GetTableColumnCommentsResults(@searchString, @LinkedServerNames)", new { @searchString = searchString, @LinkedServerNames = selectedServerNamesString }).ToList();
                 return View(results);
             }
-            return View();
         }
-
     }
 }
