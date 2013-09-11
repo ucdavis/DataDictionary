@@ -46,7 +46,7 @@ namespace BannerDataDictionary.Controllers
                 var searchString = model.SearchString;
                 var selectedServerNames = model.SelectedServersNames;
                 var selectedServerNamesConcat = "";
-                if (selectedServerNames.Any())
+                if (selectedServerNames != null && selectedServerNames.Any())
                 {
                     foreach (var name in selectedServerNames)
                     {
@@ -55,11 +55,7 @@ namespace BannerDataDictionary.Controllers
                     selectedServerNamesConcat = selectedServerNamesConcat.Substring(0,
                                                                                     selectedServerNamesConcat.Length - 1);
                 }
-                else
-                {
-                    selectedServerNamesConcat = "DEFAULT";
-                }
-
+               
                     conn.Open();
                 IList<SearchResult> results =
                     conn.Query<SearchResult>(@"SELECT * FROM dbo.udf_GetTableColumnCommentsResults(@searchString, @LinkedServerNames)", new { @searchString = searchString, @LinkedServerNames = selectedServerNamesConcat }).ToList();
