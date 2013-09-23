@@ -32,22 +32,33 @@ namespace BannerDataDictionary.Controllers
         [HttpPost]
         public ActionResult Details(SearchModel model)
         {
-            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["MainDb"].ConnectionString))
+            if (ModelState.IsValid)
             {
-                var searchString = model.SearchString;
-                var selectedServerNames = model.SelectedServerNames;  //This what's populated when a user selects (a) linked server(s).
-                var selectedServerNamesString = "";
-                if (selectedServerNames != null && selectedServerNames.Any())
+                using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["MainDb"].ConnectionString))
                 {
-                    selectedServerNamesString = selectedServerNames.Aggregate(selectedServerNamesString, (current, name) => current + (name + ","));
-                    selectedServerNamesString = selectedServerNamesString.Substring(0, selectedServerNamesString.Length - 1);
-                }
+                    var searchString = model.SearchString;
+                    var selectedServerNames = model.SelectedServerNames;
+                        //This what's populated when a user selects (a) linked server(s).
+                    var selectedServerNamesString = "";
+                    if (selectedServerNames != null && selectedServerNames.Any())
+                    {
+                        selectedServerNamesString = selectedServerNames.Aggregate(selectedServerNamesString,
+                                                                                  (current, name) =>
+                                                                                  current + (name + ","));
+                        selectedServerNamesString = selectedServerNamesString.Substring(0,
+                                                                                        selectedServerNamesString.Length -
+                                                                                        1);
+                    }
 
-                conn.Open();
-                var results =
-                    conn.Query<SearchResult>(@"SELECT * FROM dbo.udf_GetTableColumnCommentsResults(@searchString, @LinkedServerNames)", new { @searchString = searchString, @LinkedServerNames = selectedServerNamesString }).ToList();
-                return View(results);
+                    conn.Open();
+                    var results =
+                        conn.Query<SearchResult>(
+                            @"SELECT * FROM dbo.udf_GetTableColumnCommentsResults(@searchString, @LinkedServerNames)",
+                            new {@searchString = searchString, @LinkedServerNames = selectedServerNamesString}).ToList();
+                    return View(results);
+                }
             }
+            return View(model);
         }
     }
 }

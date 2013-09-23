@@ -61,7 +61,7 @@ namespace BannerDataDictionary.Controllers
                 }
                 else
                 {
-                    message = databaseOwnerName + message;
+                    message = linkedServerName +'.' + databaseOwnerName + message;
                 }
                 ViewBag.Message = message;
 
@@ -81,7 +81,8 @@ namespace BannerDataDictionary.Controllers
         // id = table name
         public ActionResult Details(Table id)
         {
-            ViewBag.Message = "Table Details";
+            var isTable = true;
+
             var linkedServerName = id.LinkedServerName ?? "SIS";
             var databaseOwner = id.Owner ?? "SATURN";
             var tableName = id.TableName;
@@ -110,6 +111,8 @@ namespace BannerDataDictionary.Controllers
                     viewModel.TableComments = firstOrDefault.Comments ?? String.Empty;
                     viewModel.NumRows = firstOrDefault.NumRows;
                     viewModel.TableType = firstOrDefault.TableType;
+                    if (!firstOrDefault.TableType.Equals("TABLE")) 
+                        isTable = false;
                 }
                 viewModel.Columns = columnsList.ToList();
                 
@@ -185,6 +188,8 @@ namespace BannerDataDictionary.Controllers
                             });
                     }
                 }
+
+                ViewBag.Message = (isTable ? "Table" : "View") + " Details";
 
                 return View(viewModel);
             }
