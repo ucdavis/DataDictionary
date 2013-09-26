@@ -14,7 +14,7 @@ using BannerDataDictionary.Models;
 namespace BannerDataDictionary.Controllers
 {
     [Authorize]
-    [InitializeSimpleMembership]
+    //[InitializeSimpleMembership]
     public class AccountController : Controller
     {
         //
