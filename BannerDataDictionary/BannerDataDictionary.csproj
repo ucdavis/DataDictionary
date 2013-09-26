@@ -446,6 +446,7 @@
     <Content Include="Content\DataTables-1.9.4\extras\TableTools\media\images\psd\file_types.psd" />
     <Content Include="Content\DataTables-1.9.4\extras\TableTools\media\images\psd\copy document.psd" />
     <Content Include="Content\DataTables-1.9.4\extras\TableTools\media\images\psd\collection.psd" />
+    <None Include="Properties\PublishProfiles\Test.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
