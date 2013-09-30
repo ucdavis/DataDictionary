@@ -75,7 +75,7 @@
                         '<option value="-1">All</option>' +
                         '</select> records'
                 },
-                "iDisplayLength": 25,
+                "iDisplayLength": 10,
                 "bAutoWidth": false,
                 "sScrollX": "100%", 
                 "sScrollXInner": "200%",
@@ -108,7 +108,7 @@
         {
             <tr>
                 <td>@item.LinkedServerName</td>
-                <td>@item.Owner</td>
+                <td>@Html.ActionLink(item.Owner, "Index", "Tables", new BannerDataDictionary.Models.DatabaseOwner{ LinkedServerName = item.LinkedServerName, Owner = item.Owner, IncludeEmptyTables = true}, null)</td>
                 <td>@Html.ActionLink(item.TableName, "Details", "Tables", new BannerDataDictionary.Models.Table { LinkedServerName = item.LinkedServerName, Owner = item.Owner, TableName = item.TableName }, null)</td>
                 <td>@if (@item.Comments != null && @item.Comments.Contains("<cmt>"))
                     {

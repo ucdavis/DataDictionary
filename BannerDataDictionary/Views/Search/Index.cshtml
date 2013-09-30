@@ -32,11 +32,13 @@
             </div>
             <div class="control-group">
                 <p>
-                    Jump directly to a Table or Column Name by selecting the appropriate boxes:
+                    Jump directly to a Table or Column Name by selecting the appropriate boxes*: 
                 </p>
+                <p><i>*Checking ALL or Leaving ALL unchecked will search ALL categories.</i></p>
                 <div class="control-group">
                     <div class="editor-label">
                         @Html.LabelFor(x => x.SearchItems, new { @class = "control-label" })
+                       
                     </div>
                     <div class="controls checkbox">
                         @foreach (var checkbox in Model.SearchItems)
@@ -46,6 +48,7 @@
                             @checkbox.Prompt<br/>
                         }
                     </div>
+                    
                 </div>                      
             </div>
             <div class="control-group">
