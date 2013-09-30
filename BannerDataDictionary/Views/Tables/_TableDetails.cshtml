@@ -79,7 +79,7 @@
         </tbody>
     </table>
 </div>
-
+@if (Model.Indexes.Count > 0) {
 <div id="Indexes">
     <div>@Html.Partial("_Spacer")</div>
     <h3>Indexes</h3>
@@ -119,41 +119,44 @@
         </tbody>
     </table>
 </div>
-
-<div id="Constraints">
-    <div>@Html.Partial("_Spacer")</div>
-    <h3>Constraints</h3>
-    <div id="ConstraintsNav">
-        <ul class="nav nav-pills">
-            <li><a href="#Columns">Columns</a></li>
-            <li><a href="#Indexes">Indexes</a></li>
-            <li><a href="#top">Top</a></li>
-        </ul>
-    </div>
-    <table id="ConstraintTable" class="table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>Position</th>
-                <th>Constraint Name</th>
-                <th>Column Name</th>
-                <th>Constraint Type</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-       
-            @foreach (var item in Model.Constraints)
-            {
+}
+@if (Model.Constraints.Count > 0)
+{
+    <div id="Constraints">
+        <div>@Html.Partial("_Spacer")</div>
+        <h3>Constraints</h3>
+        <div id="ConstraintsNav">
+            <ul class="nav nav-pills">
+                <li><a href="#Columns">Columns</a></li>
+                <li><a href="#Indexes">Indexes</a></li>
+                <li><a href="#top">Top</a></li>
+            </ul>
+        </div>
+        <table id="ConstraintTable" class="table-bordered table-striped">
+            <thead>
                 <tr>
-                    <td>@item.ColumnPosition</td>
-                    <td>@item.ConstraintName</td>
-                    <td>
-                        @item.ColumnName
-                    </td>
-                    <td>@item.ConstraintType</td>
-                    <td>@item.Status</td>
+                    <th>Position</th>
+                    <th>Constraint Name</th>
+                    <th>Column Name</th>
+                    <th>Constraint Type</th>
+                    <th>Status</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+       
+                @foreach (var item in Model.Constraints)
+                {
+                    <tr>
+                        <td>@item.ColumnPosition</td>
+                        <td>@item.ConstraintName</td>
+                        <td>
+                            @item.ColumnName
+                        </td>
+                        <td>@item.ConstraintType</td>
+                        <td>@item.Status</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

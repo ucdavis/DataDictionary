@@ -31,6 +31,24 @@
                 </div>
             </div>
             <div class="control-group">
+                <p>
+                    Jump directly to a Table or Column Name by selecting the appropriate boxes:
+                </p>
+                <div class="control-group">
+                    <div class="editor-label">
+                        @Html.LabelFor(x => x.SearchItems, new { @class = "control-label" })
+                    </div>
+                    <div class="controls checkbox">
+                        @foreach (var checkbox in Model.SearchItems)
+                        {
+                            @Html.CheckBox(checkbox.Name, new {id=checkbox.Id})
+                           
+                            @checkbox.Prompt<br/>
+                        }
+                    </div>
+                </div>                      
+            </div>
+            <div class="control-group">
                 <div class="editor-label">
                     <p>
                         Enter keyword(s) or text string that can be part of a Table Name, Column Name, or be present in the comment fields:*
@@ -43,6 +61,8 @@
                     @Html.ValidationMessageFor(model => model.SearchString)
                 </div>
             </div>
+            
+            
         </fieldset>
     </div>
     

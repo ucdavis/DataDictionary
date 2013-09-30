@@ -37,6 +37,9 @@ namespace BannerDataDictionary.Controllers
                 using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["MainDb"].ConnectionString))
                 {
                     var searchString = model.SearchString;
+                    var searchTables = model.SearchTables;
+                    var searchColumns = model.SearchColumns;
+                    var searchComments = model.SearchComments;
                     var selectedServerNames = model.SelectedServerNames;
                         //This what's populated when a user selects (a) linked server(s).
                     var selectedServerNamesString = "";
@@ -53,8 +56,11 @@ namespace BannerDataDictionary.Controllers
                     conn.Open();
                     var results =
                         conn.Query<SearchResult>(
-                            @"SELECT * FROM dbo.udf_GetTableColumnCommentsResults(@searchString, @LinkedServerNames)",
-                            new {@searchString = searchString, @LinkedServerNames = selectedServerNamesString}).ToList();
+                            @"SELECT * FROM dbo.udf_GetTableColumnCommentsResults(@searchString, @LinkedServerNames, 
+                                @SearchTables, @SearchColumns, @SearchComments)",
+                            new {@searchString = searchString, @LinkedServerNames = selectedServerNamesString,
+                                 @SearchTables = searchTables, @SearchColumns = searchColumns, @SearchComments = searchComments
+                            }).ToList();
                     return View(results);
                 }
             }
