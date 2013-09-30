@@ -6,8 +6,14 @@
     <h3>Columns</h3>
     <div id="ColumnsNav">
     <ul class="nav nav-pills">
-        <li><a href="#Indexes">Indexes</a></li>
-        <li><a href="#Constraints">Constraints</a></li>
+        @if (Model.Indexes.Count > 0)
+        {
+            <li><a href="#Indexes">Indexes</a></li>
+        }
+        @if (Model.Constraints.Count > 0)
+        {
+            <li><a href="#Constraints">Constraints</a></li>
+        }
         <li><a href="#top">Top</a></li>
     </ul>
     </div>
@@ -86,7 +92,10 @@
     <div id="IndexesNav">
     <ul class="nav nav-pills">
         <li><a href="#Columns">Columns</a></li>
-        <li><a href="#Constraints">Constraints</a></li>
+        @if (Model.Constraints.Count > 0)
+        {
+            <li><a href="#Constraints">Constraints</a></li>
+        }
         <li><a href="#top">Top</a></li>
     </ul>
     </div>
@@ -122,13 +131,17 @@
 }
 @if (Model.Constraints.Count > 0)
 {
+    
     <div id="Constraints">
         <div>@Html.Partial("_Spacer")</div>
         <h3>Constraints</h3>
         <div id="ConstraintsNav">
             <ul class="nav nav-pills">
                 <li><a href="#Columns">Columns</a></li>
-                <li><a href="#Indexes">Indexes</a></li>
+                @if (Model.Indexes.Count > 0)
+                {
+                    <li><a href="#Indexes">Indexes</a></li>
+                }
                 <li><a href="#top">Top</a></li>
             </ul>
         </div>
