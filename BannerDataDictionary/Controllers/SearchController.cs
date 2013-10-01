@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 using BannerDataDictionary.Models;
 using Dapper;
 
@@ -61,6 +62,13 @@ namespace BannerDataDictionary.Controllers
                             new {@searchString = searchString, @LinkedServerNames = selectedServerNamesString,
                                  @SearchTables = searchTables, @SearchColumns = searchColumns, @SearchComments = searchComments
                             }).ToList();
+
+                    if (results.Count == 1)
+                    {
+                        // means we got back a single matching table => jump to table details page:
+                        var result = results.FirstOrDefault();
+                        return RedirectToAction("Details", "Tables", new Table { LinkedServerName = result.LinkedServerName, Owner = result.Owner, TableName = result.TableName });
+                    }
                     return View(results);
                 }
             }
