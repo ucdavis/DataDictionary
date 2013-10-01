@@ -32,7 +32,7 @@
             </div>
             <div class="control-group">
                 <p>
-                    Jump directly to a Table or Column Name by selecting the appropriate boxes*: 
+                    Jump directly to a Table or Column Name by selecting the appropriate boxes:* 
                 </p>
                 <p><i>*Checking ALL or Leaving ALL unchecked will search ALL categories.</i></p>
                 <div class="control-group">
@@ -54,8 +54,9 @@
             <div class="control-group">
                 <div class="editor-label">
                     <p>
-                        Enter keyword(s) or text string that can be part of a Table Name, Column Name, or be present in the Comment fields:*
+                        Enter keyword(s) or text string that can be part of a Table Name, Column Name, or be present in the Comment fields:**
                     </p>
+                    <p><i>**Note: Entering generic search terms will take awhile to process and will return large amounts of data.  Please be patient.</i></p>
                     @Html.LabelFor(x => x.SearchString, new { @class = "control-label required" })@*<span>*</span>*@
                     
                 </div>
@@ -64,8 +65,6 @@
                     @Html.ValidationMessageFor(model => model.SearchString)
                 </div>
             </div>
-            
-            
         </fieldset>
     </div>
     
@@ -73,5 +72,5 @@
        
         <input type="submit" class="btn btn-primary" value="Search" />
     </div>
-     <p>*Note that entering generic search terms will take awhile to process and returns large amounts of data.  Please be patient.</p>
+     <p><i>*Note: Entering generic search terms will take awhile to process and will return large amounts of data.  Please be patient.</i></p>
 } <!--End using (Html.BeginForm("Details", "Search")) -->
