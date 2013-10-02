@@ -45,6 +45,22 @@ namespace BannerDataDictionary.Controllers
             return View(model);
         }
 
+        public ActionResult LogOut()
+        {
+            FormsAuthentication.SignOut();
+            Session.Abandon();
+            var myLogoutPage = "LoggedOut";
+            var postBackUrl = "https://cas.ucdavis.edu/cas/logout?service=" + Request.Url.ToString().Substring(0, Request.Url.ToString().LastIndexOf("/") + 1) + myLogoutPage;
+
+            return Redirect(postBackUrl);
+        }
+
+       [AllowAnonymous]
+        public ActionResult LoggedOut()
+        {
+            return View();
+        }
+
         //
         // POST: /Account/LogOff
 

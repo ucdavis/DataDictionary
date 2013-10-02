@@ -22,5 +22,19 @@ namespace BannerDataDictionary.Controllers
                 return View(resultList);
             }
         }
+
+        [AllowAnonymous]
+        public ActionResult About()
+        {
+            ViewBag.Message = "About";
+            return View();
+        }
+
+        [AllowAnonymous]
+        public ActionResult Contact()
+        {
+            ViewBag.Message = "Contact";
+            return View();
+        }
     }
 }
