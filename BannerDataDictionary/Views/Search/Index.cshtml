@@ -1,0 +1,76 @@
+﻿@model BannerDataDictionary.Models.SearchModel
+@{
+    ViewBag.Title = "Search";
+}
+
+@section subhead
+{
+    <h1>@ViewBag.Message</h1>
+
+    <div>
+        <p>Search <i>Any</i> Linked Server for Tables, Columns or Comments matching the criteria provided</p>
+    </div>
+}
+      
+@using (Html.BeginForm("Details", "Search", null, FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken();
+    @Html.ValidationSummary(true, "Validation errors. Please correct the errors and try again.");
+    <div class="control-group">
+        <fieldset>
+            <legend>Search Form</legend>
+            <div class="control-group">
+                <div class="editor-label">
+                    <p>Select the Linked Server(s) to search against:
+                    </p>
+                    <p><i>(Not selecting <strong>Any</strong> will search <strong>All</strong> Linked Servers)</i></p>
+                    @Html.LabelFor(x => x.LinkedServers, new { @class = "control-label" })
+                </div>
+                <div class="controls">
+                    @Html.ListBoxFor(x => x.SelectedServerNames, new MultiSelectList(Model.LinkedServers, "Name", "Name"))
+                </div>
+            </div>
+            <div class="control-group">
+                <p>
+                    Jump directly to a Table or Column Name by selecting the appropriate boxes:* 
+                </p>
+                <p><i>*Checking ALL or Leaving ALL unchecked will search ALL categories.</i></p>
+                <div class="control-group">
+                    <div class="editor-label">
+                        @Html.LabelFor(x => x.SearchItems, new { @class = "control-label" })
+                       
+                    </div>
+                    <div class="controls checkbox">
+                        @foreach (var checkbox in Model.SearchItems)
+                        {
+                            @Html.CheckBox(checkbox.Name, new {id=checkbox.Id})
+                           
+                            @checkbox.Prompt<br/>
+                        }
+                    </div>
+                    
+                </div>                      
+            </div>
+            <div class="control-group">
+                <div class="editor-label">
+                    <p>
+                        Enter keyword(s) or text string that can be part of a Table Name, Column Name, or be present in the Comment fields:**
+                    </p>
+                    <p><i>**Note: Entering generic search terms will take awhile to process and will return large amounts of data.  Please be patient.</i></p>
+                    @Html.LabelFor(x => x.SearchString, new { @class = "control-label required" })@*<span>*</span>*@
+                    
+                </div>
+                <div class="controls">
+                    @Html.TextBoxFor(x => x.SearchString)
+                    @Html.ValidationMessageFor(model => model.SearchString)
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    
+    <div class="form-actions">
+       
+        <input type="submit" class="btn btn-primary" value="Search" />
+    </div>
+     <p><i>*Note: Entering generic search terms will take awhile to process and will return large amounts of data.  Please be patient.</i></p>
+} <!--End using (Html.BeginForm("Details", "Search")) -->

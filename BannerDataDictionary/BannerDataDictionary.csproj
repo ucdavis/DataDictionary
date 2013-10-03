@@ -229,12 +229,17 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ApplicationController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\OwnersController.cs" />
     <Compile Include="Controllers\SampleController.cs" />
+    <Compile Include="Controllers\SearchController.cs" />
+    <Compile Include="Controllers\TablesController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\OwnersModel.cs" />
+    <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Models\TableDetailsModel.cs" />
     <Compile Include="Models\DataClasses.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -246,6 +251,7 @@
     <Content Include="Content\bootstrap-responsive.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Css\cas.css" />
     <Content Include="Content\custom.css" />
     <Content Include="Content\DataTables-1.9.4\docs\media\css\doc.css" />
     <Content Include="Content\DataTables-1.9.4\docs\media\css\shCore.css" />
@@ -441,6 +447,7 @@
     <Content Include="Content\DataTables-1.9.4\extras\TableTools\media\images\psd\file_types.psd" />
     <Content Include="Content\DataTables-1.9.4\extras\TableTools\media\images\psd\copy document.psd" />
     <Content Include="Content\DataTables-1.9.4\extras\TableTools\media\images\psd\collection.psd" />
+    <None Include="Properties\PublishProfiles\Test.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -508,10 +515,15 @@
     <Content Include="Views\Sample\Form.cshtml" />
     <Content Include="Views\Sample\DisplayForm.cshtml" />
     <Content Include="Views\Sample\DataTable.cshtml" />
-    <Content Include="Views\Home\Details.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Home\_TableDetails.cshtml" />
     <Content Include="Views\Shared\_Spacer.cshtml" />
+    <Content Include="Views\Tables\Index.cshtml" />
+    <Content Include="Views\Tables\Details.cshtml" />
+    <Content Include="Views\Tables\_TableDetails.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Owners\Index.cshtml" />
+    <Content Include="Views\Search\Index.cshtml" />
+    <Content Include="Views\Search\Details.cshtml" />
+    <Content Include="Views\Account\LoggedOut.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -14,7 +14,7 @@ using BannerDataDictionary.Models;
 namespace BannerDataDictionary.Controllers
 {
     [Authorize]
-    [InitializeSimpleMembership]
+    //[InitializeSimpleMembership]
     public class AccountController : Controller
     {
         //
@@ -43,6 +43,22 @@ namespace BannerDataDictionary.Controllers
             // If we got this far, something failed, redisplay form
             ModelState.AddModelError("", "The user name or password provided is incorrect.");
             return View(model);
+        }
+
+        public ActionResult LogOut()
+        {
+            FormsAuthentication.SignOut();
+            Session.Abandon();
+            var myLogoutPage = "LoggedOut";
+            var postBackUrl = "https://cas.ucdavis.edu/cas/logout?service=" + Request.Url.ToString().Substring(0, Request.Url.ToString().LastIndexOf("/") + 1) + myLogoutPage;
+
+            return Redirect(postBackUrl);
+        }
+
+       [AllowAnonymous]
+        public ActionResult LoggedOut()
+        {
+            return View();
         }
 
         //
