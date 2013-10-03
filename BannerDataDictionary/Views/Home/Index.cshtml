@@ -1,63 +1,46 @@
-﻿@model IEnumerable<BannerDataDictionary.Models.Table>
+﻿@using BannerDataDictionary.Models
+@model IList<BannerDataDictionary.Models.LinkedServer>
+           
 @{
-    ViewBag.Title = "Tables";
+    ViewBag.Title = "Index";
 }
-
-@Styles.Render("~/Content/DataTables-1.9.4/media/css/dataTables")
 
 @section subhead
 {
     <h1>@ViewBag.Message</h1>
 
     <div>
-        <p>A listing of Banner Student Tables</p>
+        <p>A listing of Oracle Linked Servers</p>
     </div>
 }
 
-@*@section subnav
-{
-    <li>@Html.ActionLink("Sample Index", "Index")</li>
-    <li>@Html.ActionLink("Form", "Form")</li>
-    <li>@Html.ActionLink("Table", "Table")</li>
-    <li class="active">@Html.ActionLink("Data Tables", "DataTable")</li>
-    <li>@Html.ActionLink("Display Form", "DisplayForm")</li>
-}*@
-
 @section AdditionalScripts
-{
-    @Scripts.Render("~/bundles/datatables")
+{}
+<div>
+    <h3>Select a Linked Server to display a list of database owners (i.e., Schemas)</h3>
+    <p>
+    </p>
 
-    <script type="text/javascript">
-        $(function () {
-            $(".table").dataTable({
-                "aaSorting": [[1, "asc"]], //Default sort on second column
-                //"aoColumnDefs": [
-                //    { 'bSortable': false, 'aTargets': [0] } //Disables sort on icon columns
-                //]
-            });
-        });
-    </script>
-    
-}
-
-<table class="table table-striped table-bordered table-hover">
-    <thead>
-        <tr>
-            <th>Owner</th>
-            <th>Name</th>
-            <th>Comments</th>
-            <th>Num Rows</th>	
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
             <tr>
-                <td>@item.Owner</td>
-                <td>@Html.ActionLink(item.TableName, "Details", "Home", new { id = item.TableName }, null)</td>
-                <td>@item.Comments</td>
-                <td>@item.NumRows</td>
+                <th>Server Name</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.ActionLink(item.Name, "Index", "Owners", new LinkedServer { Name = item.Name }, null)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <h3>Search All Linked Servers for specific keywords or text</h3>
+    <p>
+        @Html.ActionLink("Global Search Page", "Index", "Search", null, null)
+    </p>
+</div>
