@@ -14,6 +14,10 @@
         {
             <li><a href="#Constraints">Constraints</a></li>
         }
+         @if (!String.IsNullOrEmpty(Model.Text))
+                {
+                    <li><a href="#Text">View SQL</a></li>
+                }
         <li><a href="#top">Top</a></li>
     </ul>
     </div>
@@ -96,6 +100,10 @@
         {
             <li><a href="#Constraints">Constraints</a></li>
         }
+         @if (!String.IsNullOrEmpty(Model.Text))
+                {
+                    <li><a href="#Text">View SQL</a></li>
+                }
         <li><a href="#top">Top</a></li>
     </ul>
     </div>
@@ -142,6 +150,10 @@
                 {
                     <li><a href="#Indexes">Indexes</a></li>
                 }
+                @if (!String.IsNullOrEmpty(Model.Text))
+                {
+                    <li><a href="#Text">View SQL</a></li>
+                }
                 <li><a href="#top">Top</a></li>
             </ul>
         </div>
@@ -171,5 +183,37 @@
                 }
             </tbody>
         </table>
+    </div>
+}
+
+@if (!String.IsNullOrEmpty(Model.Text))
+{
+    
+    <div id="Text">
+        <div>@Html.Partial("_Spacer")</div>
+        <h3>View SQL</h3>
+        <div id="TextNav">
+            <ul class="nav nav-pills">
+                <li><a href="#Columns">Columns</a></li>
+                @if (Model.Indexes.Count > 0)
+                {
+                    <li><a href="#Indexes">Indexes</a></li>
+                }
+                @if (Model.Constraints.Count > 0)
+                {
+                    <li><a href="#Constraints">Constraints</a></li>
+                }
+
+                <li><a href="#top">Top</a></li>
+            </ul>
+        </div>
+        <div>
+            <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+            <p>
+                <pre class="prettyprint lang-sql">
+@Model.Text
+                </pre>
+            </p>
+        </div>
     </div>
 }

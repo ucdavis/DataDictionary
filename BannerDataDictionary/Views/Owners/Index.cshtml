@@ -21,8 +21,8 @@
     var linkedServerName = Request.QueryString.Get("Name");
     var includeEmptyTablesValue = Request.QueryString.Get("IncludeEmptyTables");
     var includeEmptyTables = false;
-    var includePrefix = "Include";
-    var excludePrefix = "Exclude";
+    const string includePrefix = "Include";
+    const string excludePrefix = "Exclude";
     var prefix = includePrefix;
     var invertedIncludeEmptyTables = true;
 
@@ -58,7 +58,7 @@
                     @item.LinkedServerName
                 </td>
                 <td>
-                    @Html.ActionLink(item.Owner, "Index", "Tables", item, null)
+                    @Html.ActionLink(item.Owner, "Index", "Tables", new { item.LinkedServerName, item.Owner, item.NumTables, includeEmptyTables }, null)
                 </td>
                 <td>@item.NumTables</td>
             </tr>
