@@ -73,6 +73,15 @@ namespace BannerDataDictionary.Controllers
                             @Owners = @databaseOwnerName, 
                             @LinkedServerNames = @linkedServerName, 
                             @IncludeEmptyTables = @includeEmptyTables", new { @databaseOwnerName = databaseOwnerName, @linkedServerName = linkedServerName, @includeEmptyTables = includeEmptyTables}).ToList();
+
+                    if (tables.Count == 1)
+                    {
+                        // means we got back a single matching table => jump to table details page:
+                        var table = tables.FirstOrDefault();
+                        
+                        return RedirectToAction("Details", "Tables", new { table.LinkedServerName, table.Owner, table.TableName, IncludeEmptyTables=includeEmptyTables});
+                    }
+
                     return View(tables);
                 }
             }
@@ -109,6 +118,7 @@ namespace BannerDataDictionary.Controllers
                 {
                     viewModel.Owner = firstOrDefault.Owner;
                     viewModel.TableComments = firstOrDefault.Comments ?? String.Empty;
+                    viewModel.Text = firstOrDefault.Text ?? String.Empty;
                     viewModel.NumRows = firstOrDefault.NumRows;
                     viewModel.TableType = firstOrDefault.TableType;
                     if (!firstOrDefault.TableType.Equals("TABLE")) 

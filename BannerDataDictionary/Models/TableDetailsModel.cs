@@ -11,6 +11,7 @@ namespace BannerDataDictionary.Models
         public string TableName { get; set; }
         public string Owner { get; set; }
         public string TableComments { get; set; }
+        public string Text { get; set; }
         public string NumRows { get; set; }
         public string TableType { get; set; }
         public IList<Column> Columns { get; set; }

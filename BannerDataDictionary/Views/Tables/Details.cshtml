@@ -53,6 +53,10 @@
     {
         <li><a href="#Constraints">Constraints</a></li>
     }
+    @if (!String.IsNullOrEmpty(Model.Text))
+    {
+        <li><a href="#Text">View SQL</a></li>
+    }
 }
 
 @section AdditionalScripts
@@ -90,7 +94,6 @@
 
         });
     </script>
-    
 }
  
 <div id="TableDetails">
