@@ -1,4 +1,4 @@
-BannerDataDictionary
+DataDictionary
 ====================
 
-Application to display Banner table and column descriptions
+Application to display Oracle table and column descriptions
