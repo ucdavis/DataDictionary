@@ -97,5 +97,6 @@
     <Build Include="dbo\Stored Procedures\usp_LoadDbaConstraintInfo.sql" />
     <Build Include="dbo\Stored Procedures\usp_LoadDbaOwnerInfo.sql" />
     <Build Include="dbo\Stored Procedures\usp_UpdateNumRows.sql" />
+    <Build Include="dbo\SQL Server Agent Job\Update DBA database SQL Server Agent job.sql" />
   </ItemGroup>
 </Project>
