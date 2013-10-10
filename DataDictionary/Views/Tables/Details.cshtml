@@ -1,0 +1,102 @@
+@using System.Xml.Linq
+@model BannerDataDictionary.Models.TableDetailsModel
+
+@{
+    ViewBag.Title = "Table Details";
+}
+
+@Styles.Render("~/Content/DataTables-1.9.4/media/css/dataTables")
+
+@section subhead
+{
+    <div id="top">@Html.Partial("_Spacer")</div>
+    <h1>@ViewBag.Message</h1>
+
+    <div>
+        <h2>@Model.LinkedServerName.@Model.Owner.@Model.TableName</h2>
+         <h5>
+             <p>@if (@Model.TableComments != null && @Model.TableComments.Contains("<cmt>"))
+                    {
+                        <ul>
+                            @{
+                        var myDoc = XDocument.Parse(@Model.TableComments);
+                        foreach (var node in myDoc.Descendants().Where(x => x.Name != "cmt"))
+                        {
+                                    <li>
+                                    <strong>@node.Name.ToString().ToUpper():</strong> @node.Value 
+                                    </li>
+                        }
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        @Model.TableComments
+                    }
+                </p>
+             @*<p>Comments...</p>*@
+             <p>Num Rows: @Model.NumRows</p>
+    </h5>	
+    </div>
+}
+
+@section subnav
+{
+    <li>@Html.ActionLink("Table Listing", "Index", "Tables", new BannerDataDictionary.Models.DatabaseOwner {Owner = @Model.Owner, LinkedServerName = @Model.LinkedServerName}, null)</li>
+    <li class="active">@Html.ActionLink("Table Details", "Details", "Tables", new BannerDataDictionary.Models.Table {LinkedServerName = @Model.LinkedServerName, Owner = @Model.Owner, TableName = @Model.TableName}, null)</li>
+    <li><a href="#Columns">Columns</a></li>
+    @if (Model.Indexes.Count > 0)
+    {
+        <li><a href="#Indexes">Indexes</a></li>
+    }
+    @if (Model.Constraints.Count > 0) 
+    {
+        <li><a href="#Constraints">Constraints</a></li>
+    }
+    @if (!String.IsNullOrEmpty(Model.Text))
+    {
+        <li><a href="#Text">View SQL</a></li>
+    }
+}
+
+@section AdditionalScripts
+{
+    @Scripts.Render("~/bundles/datatables")
+
+    <script type="text/javascript">
+        $(function () {
+            var oTable = $(".table").dataTable({
+                "oLanguage": {
+                    "sLengthMenu": 'Display <select>' +
+                        '<option value="10">10</option>' +
+                        '<option value="25">25</option>' +
+                        '<option value="50">50</option>' +
+                        '<option value="100">100</option>' +
+                        '<option value="-1">All</option>' +
+                        '</select> records'
+                },
+                "iDisplayLength": -1,
+                "aaSorting": [[0, "asc"]], //Default sort on second column
+                //"aoColumnDefs": [
+                //    //{ 'bSortable': false, 'aTargets': [0, 5] } //Disables sort on icon columns
+                //]
+            });
+            var oTable2 = $('#IndexTable').dataTable({
+                "bSort": false,
+                "bPaginate": false,
+                "bInfo":false           
+            });
+            var oTable3 = $('#ConstraintTable').dataTable({
+                "bSort": false,
+                "bPaginate": false,
+                "bInfo": false
+            });
+
+        });
+    </script>
+}
+ 
+<div id="TableDetails">
+    @Html.Partial("_TableDetails")
+</div>
+

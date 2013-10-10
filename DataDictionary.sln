@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{D515E769-5CB1-4353-9BDC-B63711975FBD}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "DBA Database", "DBA Database\DBA Database.sqlproj", "{BA331FDC-B99E-4416-9FAA-1E728F6136EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDictionary", "DataDictionary\DataDictionary.csproj", "{E669B412-CE88-42CF-851F-B6665E16A131}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BA331FDC-B99E-4416-9FAA-1E728F6136EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA331FDC-B99E-4416-9FAA-1E728F6136EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA331FDC-B99E-4416-9FAA-1E728F6136EC}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{BA331FDC-B99E-4416-9FAA-1E728F6136EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA331FDC-B99E-4416-9FAA-1E728F6136EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA331FDC-B99E-4416-9FAA-1E728F6136EC}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{E669B412-CE88-42CF-851F-B6665E16A131}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E669B412-CE88-42CF-851F-B6665E16A131}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E669B412-CE88-42CF-851F-B6665E16A131}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E669B412-CE88-42CF-851F-B6665E16A131}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
