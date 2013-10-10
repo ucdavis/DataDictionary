@@ -66,6 +66,7 @@
     <Folder Include="Security\" />
     <Folder Include="dbo\Functions\" />
     <Folder Include="dbo\Stored Procedures\" />
+    <Folder Include="dbo\SQL Server Agent Job" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\TableInfo.sql" />
