@@ -1,5 +1,6 @@
 ﻿@section AdditionalScripts{
-    <link href="@Url.Css("cas.css")" rel="stylesheet" type="text/css" />
+   @* <link href="https://cas.ucdavis.edu:8443/cas/themes/ucdavis/cas.css" rel="stylesheet" type="text/css" />*@
+    <link href="@Url.Css("new_cas.css")" rel="stylesheet" type="text/css" />
 }
 @{
     ViewBag.Title = "Logged Out"; }
@@ -10,19 +11,23 @@
                 <!-- content container -->
                 <div id="header" style="width: auto; height: auto; padding-left: 0px;">
                     <div id="logo">
-                        <img src="https://cas.ucdavis.edu/cas/images/ucdavisheader.jpg" width="580" height="40"
-                            alt="University of California, Davis" /></div>
-                    <h1 id="app-name">
-                        Central Authentication Service (CAS)</h1>
+                        @*<img src="@Url.Image("ucdheader.jpg")" width="580" height="40"
+                             alt="University of California, Davis" />*@
+
+                        <img src="https://cas.ucdavis.edu:8443/cas/images/ucdheader.jpg" width="580" height="40"
+                             alt="University of California, Davis" />
+                    </div>
+                    <h1 id="app-name">Central Authentication Service (CAS)</h1>
                 </div>
                 <div id="content">
-                    <div id="msg" class="success">
-                        <h2>
-                            Logout successful</h2>
+                    <div id="msg" class="success" style="background-color: rgb(221, 255, 170);">
+                        <h2>Logout successful</h2>
                         <p>
-                            You have successfully logged out of the UC Davis Central Authentication Service.</p>
+                            You have successfully logged out of the UC Davis Central Authentication Service.
+                        </p>
                         <p>
-                            For your security, please exit your Web browser.</p>
+                            For your security, please exit your Web browser.
+                        </p>
                     </div>
                 </div>
                 <!-- content -->
@@ -31,33 +36,21 @@
         </div>
         <!-- innerborder -->
     </div>
+
     <!-- dialog -->
     <div id="cas-footer">
         <div id="notices">
-            <h1>
-                IMPORTANT SECURITY NOTIFICATION</h1>
-            <p>
-                Your campus computing account Login ID and Password should only be used when you
-                authenticate to campus Web sites and online services.</p>
-            <p>
-                UC Davis will never ask you to confirm or verify your computing account by providing
-                your password via telephone or email. Requests that ask you to reply to an email
-                or visit a non-campus affiliated Web site to confirm or verify your account by providing
-                your password are called phishing scams. <span class="emphasized">DO NOT RESPOND TO
-                    THESE REQUESTS</span> even if they appear to come from an email address ending
-                with "ucdavis.edu".</p>
-            <p>
-                If you think you have provided your password or other personal information in response
-                to a phishing scam, contact the IT Express Computing Services Help Desk immediately
-                at 530-754-HELP (4357).</p>
+            <h1>SECURITY NOTICES</h1>
+            <p>Protect your campus computing account login ID and passphrase. Use them only for campus websites and campus online services.</p>
+            <p><span class="emphasized">UC Davis will never ask you to provide your passphrase via phone or email.</span> A message that asks you to is probably a <span style="font-style: italic;">phishing scam</span>. Delete it without responding.</p>
+            <p><span class="emphasized">Be extremely wary</span> of messages that ask you enter your passphrase into a non-UC Davis website. If you have doubts about a message or website, or think you have been tricked into submitting your passphrase or personal information, call the IT Express Computing Services Help Desk at 530-754-HELP (4357).</p>
         </div>
         <div>
-            <p>
-                Copyright &copy; Regents of the University of California, Davis campus, 2005-2008.
-                All Rights Reserved.</p>
+            <p>Copyright © Regents of the University of California, Davis campus, 2005-2013. All Rights Reserved.</p>
         </div>
     </div>
 </div>
+
 <div id="divReturnToLoginPage">
     <br />
     <br />

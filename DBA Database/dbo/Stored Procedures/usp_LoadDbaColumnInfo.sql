@@ -45,7 +45,7 @@ BEGIN
 	)
 
 	INSERT INTO @OracleLinkedServers
-	EXEC sp_linkedservers
+	EXEC usp_GetOracleLinkedServerNames
 
 	If @IsDebug = 1
 		SELECT SRV_NAME Name FROM @OracleLinkedServers WHERE SRV_PROVIDERNAME = 'OraOLEDB.Oracle' 

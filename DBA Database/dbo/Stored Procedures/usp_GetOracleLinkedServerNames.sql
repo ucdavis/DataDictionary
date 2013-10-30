@@ -28,6 +28,9 @@ PAY_PERS_EXTR
 SIS
 SIS_DEV
 */
+-- Modifications:
+--	2013-10-30 by kjt:  Added filtering to remove SIS servers from list.
+--
 -- =============================================
 CREATE PROCEDURE [dbo].[usp_GetOracleLinkedServerNames] 
 	-- Add the parameters for the stored procedure here
@@ -52,7 +55,7 @@ BEGIN
 
 	SELECT SRV_NAME Name 
 	FROM @OracleLinkedServers
-	WHERE SRV_PROVIDERNAME = 'OraOLEDB.Oracle'
+	WHERE SRV_PROVIDERNAME = 'OraOLEDB.Oracle' AND SRV_NAME NOT LIKE 'SIS%'
 
 	/*
 	FIS_DS

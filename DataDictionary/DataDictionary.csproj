@@ -237,11 +237,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AccountModels.cs" />
-    <Compile Include="Models\OwnersModel.cs" />
-    <Compile Include="Models\SearchModel.cs" />
-    <Compile Include="Models\TableDetailsModel.cs" />
-    <Compile Include="Models\DataClasses.cs" />
+    <Compile Include="Properties\Models\AccountModels.cs" />
+    <Compile Include="Properties\Models\OwnersModel.cs" />
+    <Compile Include="Properties\Models\SearchModel.cs" />
+    <Compile Include="Properties\Models\TableDetailsModel.cs" />
+    <Compile Include="Properties\Models\DataClasses.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -392,6 +392,7 @@
     <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
+    <Content Include="Css\new_cas.css" />
     <Content Include="favicon.ico" />
     <Content Include="faviconUcdArch.ico" />
     <Content Include="Global.asax" />

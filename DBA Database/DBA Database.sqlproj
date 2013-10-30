@@ -8,7 +8,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{ba331fdc-b99e-4416-9faa-1e728f6136ec}</ProjectGuid>
-    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql110DatabaseSchemaProvider</DSP>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql100DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
@@ -82,7 +82,6 @@
     <Build Include="Security\AESDEAN_prodreports.sql" />
     <Build Include="Security\AESDEAN_ProdApp.sql" />
     <Build Include="dbo\Functions\udf_CreateQuotedStringList.sql" />
-    <Build Include="dbo\Functions\udf_GetOracleLinkedServerNames.sql" />
     <Build Include="dbo\Functions\udf_GetTableColumnCommentsResults.sql" />
     <Build Include="dbo\Stored Procedures\usp_GetOracleLinkedServerNames.sql" />
     <Build Include="dbo\Stored Procedures\usp_GetLinkedServerTableNamesAndComments.sql" />
@@ -97,6 +96,12 @@
     <Build Include="dbo\Stored Procedures\usp_LoadDbaConstraintInfo.sql" />
     <Build Include="dbo\Stored Procedures\usp_LoadDbaOwnerInfo.sql" />
     <Build Include="dbo\Stored Procedures\usp_UpdateNumRows.sql" />
-    <Build Include="dbo\SQL Server Agent Job\Update DBA database SQL Server Agent job.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\100\SqlSchemas\master.dacpac">
+      <HintPath>$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\100\SqlSchemas\master.dacpac</HintPath>
+      <SuppressMissingDependenciesErrors>True</SuppressMissingDependenciesErrors>
+      <DatabaseVariableLiteralValue>master</DatabaseVariableLiteralValue>
+    </ArtifactReference>
   </ItemGroup>
 </Project>
