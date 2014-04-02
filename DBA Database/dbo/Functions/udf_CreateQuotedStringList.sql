@@ -13,6 +13,7 @@
 --	The final example is for use within an OPENQUERY TSQL String.
 -- Modifications:
 --	2013-08-07 by kjt: Changed var @temp length from varchar(20) to varchar(200).
+--	2014-03-19 by kjt: Added logic to trim leading or trailing spaces from values. 
 -- =============================================
 CREATE FUNCTION [dbo].[udf_CreateQuotedStringList] 
 (
@@ -61,7 +62,7 @@ BEGIN
 	-- Build the quoted strings list:
 	WHILE @@FETCH_STATUS = 0
 	BEGIN
-		SELECT @QuotedStringsList +=  @TextQualifier + @temp + @TextQualifier
+		SELECT @QuotedStringsList +=  @TextQualifier + RTRIM(LTRIM(@temp)) + @TextQualifier
 		FETCH NEXT FROM MyCursor INTO @temp
     
     	IF @@FETCH_STATUS = 0

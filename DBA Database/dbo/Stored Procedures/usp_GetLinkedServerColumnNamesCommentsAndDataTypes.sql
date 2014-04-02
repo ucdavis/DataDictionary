@@ -13,6 +13,7 @@ EXEC	@return_value = [dbo].[usp_GetLinkedServerColumnNamesCommentsAndDataTypes]
 		@Owners = 'SATURN', --Use a non-spaced comma delimited list, i.e. 'SATURN,SYS', etc.
 		@TableNames = '', --Or an non-spaced comma delimited list of tables, i.e. 'SABAUDF,SABNSTU',etc
 		@LinkedServerNames = N'SIS',--Use a non-spaced comma delimited list of linked Oracle server names, i.e. 'SIS,FIS_DS', etc.
+		@IncludeBannerItems bit = 0, --Set to 1 to include Banner info.
 		@IsDebug = 0 --Set to 1 to print SQL only.
 
 SELECT	'Return Value' = @return_value
@@ -22,12 +23,14 @@ GO
 -- Modifications:
 --	2013-08-14 by kjt: Renamed and revised for use with DBA database's TableInfo table, plus also handle
 --	multiple linked servers.
+--	2014-04-01 by kjt: Added param @IncludeBannerItems to filter out data with whose LinkedServerNames begin with 'SIS'
 -- =============================================
-CREATE PROCEDURE [dbo].[usp_GetLinkedServerColumnNamesCommentsAndDataTypes] 
+create PROCEDURE [dbo].[usp_GetLinkedServerColumnNamesCommentsAndDataTypes] 
 	-- Add the parameters for the stored procedure here
 	@Owners varchar(MAX) = 'SATURN', --Use a non-spaced comma delimited list, i.e. 'SATURN,SYS', etc.
 	@TableNames varchar(MAX) = '', --Or an non-spaced comma delimited list of tables, i.e. 'SABAUDF,SABNSTU',etc
 	@LinkedServerNames varchar(MAX) = 'SIS', --Use a non-spaced comma delimited list of linked Oracle server names, i.e. 'SIS,FIS_DS', etc.
+	@IncludeBannerItems bit = 0, --Set to 1 to include Banner info.
 	@IsDebug bit = 0 --Set to 1 to print SQL only.
 
 AS
@@ -56,6 +59,14 @@ BEGIN
 			IF @WhereClause IS NOT NULL AND @WhereClause NOT LIKE ''
 				SELECT @WhereClause += ' AND '
 			SELECT @WhereClause += 'OWNER IN (' + dbo.udf_CreateQuotedStringList(@NumQuotes, @Owners, DEFAULT) + ')'
+		END
+
+	IF @IncludeBannerItems = 0
+		BEGIN
+			IF (@WhereClause IS NOT NULL AND @WhereClause NOT LIKE '')
+				SELECT @WhereClause += ' AND '
+
+			SELECT @WhereClause += 'LinkedServerName NOT LIKE ''SIS%'''
 		END
 
 	DECLARE @TSQL varchar(MAX) = 'SELECT LinkedServerName, Owner, TableName, ColumnName, ColumnComments, DataType, DataLength, DataPrecision, DataScale, Nullable, ColumnID

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
@@ -29,9 +30,20 @@ namespace BannerDataDictionary.Controllers
                 using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["MainDb"].ConnectionString))
                 {
                     conn.Open();
-                    //IList<DatabaseOwner> databaseOwners = conn.Query<DatabaseOwner>(@"EXEC usp_GetLinkedServerDatabaseOwnersAndTableCount @LinkedServerNames ='" + linkedServerName + "', @IncludeEmptyTables = " + includeEmptyTables).ToList();
-                    IList<DatabaseOwner> databaseOwners = conn.Query<DatabaseOwner>(@"EXEC usp_GetLinkedServerDatabaseOwnersAndTableCount @LinkedServerNames = @linkedServerName, @IncludeEmptyTables = @includeEmptyTables", new { @linkedServerName = linkedServerName, @includeEmptyTables = includeEmptyTables }).ToList();
 
+                    var loginId = User.Identity.Name;
+                    var bannerUserList = conn.Query(string.Format("SELECT LoginId FROM BannerLoginIds WHERE LoginId = '{0}'", loginId)).ToList();
+                    var includeBannerItems = bannerUserList.Count() == 1 ? true : false;
+
+                    var databaseOwners = conn.Query<DatabaseOwner>(
+                            @"EXEC usp_GetLinkedServerDatabaseOwnersAndTableCount @LinkedServerNames = @linkedServerName, @IncludeEmptyTables = @includeEmptyTables, @IncludeBannerItems = @includeBannerItems",
+                            new
+                                {
+                                    @linkedServerName = linkedServerName,
+                                    @includeEmptyTables = includeEmptyTables,
+                                    @includeBannerItems = includeBannerItems
+                                }).ToList();
+                   
                     return View(databaseOwners);
                 }
             }

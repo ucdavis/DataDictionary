@@ -30,10 +30,11 @@ SIS_DEV
 */
 -- Modifications:
 --	2013-10-30 by kjt:  Added filtering to remove SIS servers from list.
---
+--  2014-04-01 by kjt: Added param @IncludeBannerItems to include Banner items if desired.
 -- =============================================
 CREATE PROCEDURE [dbo].[usp_GetOracleLinkedServerNames] 
 	-- Add the parameters for the stored procedure here
+	@IncludeBannerItems bit = 0 --Set to 1 to include Banner info.
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -53,9 +54,11 @@ BEGIN
 	INSERT INTO @OracleLinkedServers
 	EXEC sp_linkedservers
 
-	SELECT SRV_NAME Name 
-	FROM @OracleLinkedServers
-	WHERE SRV_PROVIDERNAME = 'OraOLEDB.Oracle' AND SRV_NAME NOT LIKE 'SIS%'
+
+	IF @IncludeBannerItems = 0
+		SELECT SRV_NAME Name FROM @OracleLinkedServers WHERE SRV_PROVIDERNAME = 'OraOLEDB.Oracle' AND SRV_NAME NOT LIKE 'SIS%'
+	ELSE
+		SELECT SRV_NAME Name FROM @OracleLinkedServers WHERE SRV_PROVIDERNAME = 'OraOLEDB.Oracle'
 
 	/*
 	FIS_DS

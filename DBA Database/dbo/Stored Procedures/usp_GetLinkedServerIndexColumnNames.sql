@@ -17,6 +17,7 @@ EXEC	@return_value = [dbo].[usp_GetLinkedServerIndexColumnNames]
 		@TableNames = '',
 		@Owners = '',
 		@LinkedServerNames = '',
+		@IncludeBannerItems = 0,
 		@IsDebug = 0
 
 SELECT	'Return Value' = @return_value
@@ -34,13 +35,15 @@ PK_SHRTGRD	SATURN	SHRTGRD	SHRTGRD_TERM_CODE_EFFECTIVE	4	ASC	UNIQUE	1438	1438
 
 -- Modifications:
 -- 2013-08-14 by kjt: Revised to use DBA database's IndexInfo table.
+-- 2014-04-01 by kjt: Added param @IncludeBannerItems to filter banner items.
 -- =============================================
-CREATE PROCEDURE [dbo].[usp_GetLinkedServerIndexColumnNames] 
+create PROCEDURE [dbo].[usp_GetLinkedServerIndexColumnNames] 
 	-- Add the parameters for the stored procedure here
 	@TableNames varchar(200) = '', --A non-spaced, comma-delimited list of table names, i.e.,'SHRTGRD' or 'SHRTGRD,SARADAP', etc. 
 	@Owners varchar(100) = 'SATURN', --A non-spaced, comma-delimited list of owners (schema(s), i.e.,'SHRTGRD' or 'SHRTGRD,SARADAP', etc. 
 	-- Note: Must supply NULL or '' for @Owner if you desire indexes for ALL database owners returned.
 	@LinkedServerNames varchar(MAX) = 'SIS', --A non-spaced, comma-delimited list of linked server names i.e.,'SIS' or 'SIS,SIS_DEV', etc. 
+	@IncludeBannerItems bit = 0, --Set to 1 to return information pertaining to Banner.
 	@IsDebug bit = 0 --Set to 1 to only print SQL generated; 0 otherwise to run sproc.
 AS
 BEGIN
@@ -80,6 +83,14 @@ DECLARE @WhereClause varchar(MAX) = '';
 				SELECT @WhereClause += ' AND '
 
 			SELECT @WhereClause += 'TableName IN (' +  dbo.udf_CreateQuotedStringList(@NumQuotes , @TableNames, DEFAULT) +')'
+		END
+
+	IF @IncludeBannerItems = 0
+		BEGIN
+			IF (@WhereClause IS NOT NULL AND @WhereClause NOT LIKE '')
+				SELECT @WhereClause += ' AND '
+
+			SELECT @WhereClause += 'LinkedServerName NOT LIKE ''SIS%'''
 		END
 
 	IF @WhereClause IS NOT NULL AND @WhereClause NOT LIKE ''

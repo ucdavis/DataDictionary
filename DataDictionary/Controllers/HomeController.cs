@@ -18,8 +18,16 @@ namespace BannerDataDictionary.Controllers
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["MainDb"].ConnectionString))
             {
                 conn.Open();
-                var resultList = conn.Query<LinkedServer>(@"EXEC usp_GetOracleLinkedServerNames").ToList();
-                return View(resultList);
+      
+                var loginId = User.Identity.Name;
+                var bannerUserList = conn.Query(string.Format("SELECT LoginId FROM BannerLoginIds WHERE LoginId = '{0}'", loginId)).ToList();
+                var includeBannerItems = bannerUserList.Count() == 1 ? true : false;
+                var resultList =
+                    conn.Query<LinkedServer>(
+                        string.Format("EXEC usp_GetOracleLinkedServerNames @IncludeBannerItems = {0}",
+                                      includeBannerItems)).ToList(); 
+                                                               
+                 return View(resultList);
             }
         }
 

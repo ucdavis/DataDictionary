@@ -68,11 +68,17 @@ namespace BannerDataDictionary.Controllers
                 using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["MainDb"].ConnectionString))
                 {
                     conn.Open();
+                    var loginId = User.Identity.Name;
+                    var bannerUserList = conn.Query(string.Format("SELECT LoginId FROM BannerLoginIds WHERE LoginId = '{0}'", loginId)).ToList();
+                    var includeBannerItems = bannerUserList.Count() == 1 ? true : false;
+
                     IList<Table> tables =
                         conn.Query<Table>(@"EXEC usp_GetLinkedServerTableNamesAndComments 
                             @Owners = @databaseOwnerName, 
                             @LinkedServerNames = @linkedServerName, 
-                            @IncludeEmptyTables = @includeEmptyTables", new { @databaseOwnerName = databaseOwnerName, @linkedServerName = linkedServerName, @includeEmptyTables = includeEmptyTables}).ToList();
+                            @IncludeEmptyTables = @includeEmptyTables, 
+                            @IncludeBannerItems = @includeBannerItems",
+                            new { @databaseOwnerName = databaseOwnerName, @linkedServerName = linkedServerName, @includeEmptyTables = includeEmptyTables, @IncludeBannerItems = includeBannerItems}).ToList();
 
                     if (tables.Count == 1)
                     {
@@ -104,14 +110,19 @@ namespace BannerDataDictionary.Controllers
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["MainDb"].ConnectionString))
             {
                 conn.Open();
-                IList<Table> tables = conn.Query<Table>(@"EXEC usp_GetLinkedServerTableNamesAndComments @TableNames = @tableName, @LinkedServerNames = @linkedServerName, @Owners = @databaseOwner", new { @tableName = tableName, @linkedServerName = linkedServerName, @databaseOwner = databaseOwner }).ToList();
-                IList<Column> columnsList = conn.Query<Column>(@"EXEC usp_GetLinkedServerColumnNamesCommentsAndDataTypes @TableNames = @tableName, @LinkedServerNames = @linkedServerName, @Owners = @databaseOwner", new { @tableName = tableName, @linkedServerName = linkedServerName, @databaseOwner = databaseOwner }).ToList();
+
+                var loginId = User.Identity.Name;
+                var bannerUserList = conn.Query(string.Format("SELECT LoginId FROM BannerLoginIds WHERE LoginId = '{0}'", loginId)).ToList();
+                var includeBannerItems = bannerUserList.Count() == 1 ? true : false;
+
+                IList<Table> tables = conn.Query<Table>(@"EXEC usp_GetLinkedServerTableNamesAndComments @TableNames = @tableName, @LinkedServerNames = @linkedServerName, @Owners = @databaseOwner, @IncludeBannerItems = @includeBannerItems", new { @tableName = tableName, @linkedServerName = linkedServerName, @databaseOwner = databaseOwner, @includeBannerItems = includeBannerItems }).ToList();
+                IList<Column> columnsList = conn.Query<Column>(@"EXEC usp_GetLinkedServerColumnNamesCommentsAndDataTypes @TableNames = @tableName, @LinkedServerNames = @linkedServerName, @Owners = @databaseOwner, @IncludeBannerItems = @includeBannerItems", new { @tableName = tableName, @linkedServerName = linkedServerName, @databaseOwner = databaseOwner, @includeBannerItems = includeBannerItems }).ToList();
 
                 // This returns a list of index columns for every index.
-                IList<DapperIndex> dapperIndexColumns = conn.Query<DapperIndex>(@"EXEC usp_GetLinkedServerIndexColumnNames @TableNames = @tableName, @LinkedServerNames = @linkedServerName, @Owners = @databaseOwner", new { @tableName = tableName, @linkedServerName = linkedServerName, @databaseOwner = databaseOwner}).ToList();
+                IList<DapperIndex> dapperIndexColumns = conn.Query<DapperIndex>(@"EXEC usp_GetLinkedServerIndexColumnNames @TableNames = @tableName, @LinkedServerNames = @linkedServerName, @Owners = @databaseOwner, @IncludeBannerItems = @includeBannerItems", new { @tableName = tableName, @linkedServerName = linkedServerName, @databaseOwner = databaseOwner, @includeBannerItems = includeBannerItems }).ToList();
 
                 // This returns a list of constraint columns for every constraint.
-                IList<DapperConstraint> dapperConstraintColumns = conn.Query<DapperConstraint>(@"EXEC usp_GetLinkedServerConstraintColumnNames @TableNames = @tableName, @LinkedServerNames = @linkedServerName, @Owners = @databaseOwner", new { @tableName = tableName, @linkedServerName = linkedServerName, @databaseOwner = databaseOwner}).ToList();
+                IList<DapperConstraint> dapperConstraintColumns = conn.Query<DapperConstraint>(@"EXEC usp_GetLinkedServerConstraintColumnNames @TableNames = @tableName, @LinkedServerNames = @linkedServerName, @Owners = @databaseOwner, @IncludeBannerItems = @includeBannerItems", new { @tableName = tableName, @linkedServerName = linkedServerName, @databaseOwner = databaseOwner, @includeBannerItems = includeBannerItems }).ToList();
 
                 var firstOrDefault = tables.FirstOrDefault();
                 if (firstOrDefault != null)

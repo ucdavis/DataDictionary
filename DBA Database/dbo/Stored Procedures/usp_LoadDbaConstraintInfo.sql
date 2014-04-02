@@ -16,9 +16,11 @@ SELECT	'Return Value' = @return_value
 GO
 */
 -- Modifications:
---
+-- 2013-10-30 by kjt: Revised to use new function dbo.udf_GetOracleLinkedServers().
+-- 2014-04-01 by kjt: Added param @IncludeBannerItems to include Banner items if desired.
 -- =============================================
 CREATE PROCEDURE [dbo].[usp_LoadDbaConstraintInfo] 
+	@IncludeBannerItems bit = 0, --Set to 1 to include Banner info.
 	@IsDebug bit = 0 --Set to 1 to print SQL only.
 AS
 BEGIN
@@ -44,7 +46,7 @@ BEGIN
 	)
 
 	INSERT INTO @OracleLinkedServers
-	EXEC usp_GetOracleLinkedServerNames
+	SELECT * FROM dbo.udf_GetOracleLinkedServers(@IncludeBannerItems);
 
 	If @IsDebug = 1
 		SELECT SRV_NAME Name FROM @OracleLinkedServers WHERE SRV_PROVIDERNAME = 'OraOLEDB.Oracle' 

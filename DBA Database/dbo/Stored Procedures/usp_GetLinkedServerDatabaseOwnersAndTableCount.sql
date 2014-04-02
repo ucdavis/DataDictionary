@@ -12,6 +12,7 @@ DECLARE	@return_value int
 EXEC	@return_value = [dbo].[usp_GetLinkedServerDatabaseOwnersAndTableCount]
 		@LinkedServerNames = N'SIS', --The name of the linked Oracle database server.
 		@IncludeEmptyTables = 1, --Set to 1 to return information for tables wth no data rows.
+		@IncludeBannerItems = 1, --Set to 1 to include Banner info.
 		@IsDebug = 0
 
 SELECT	'Return Value' = @return_value
@@ -20,10 +21,12 @@ GO
 */
 -- Modifications:
 --	2013-08-15 by kjt: Modified to use local DBA database, and accept multiple LinkedServerNames
+--	2014-04-01 by kjt: Added param @IncludeBannerItems to filter out data with whose LinkedServerNames begin with 'SIS'
 -- =============================================
 CREATE PROCEDURE [dbo].[usp_GetLinkedServerDatabaseOwnersAndTableCount] 
 	@LinkedServerNames varchar(MAX) = N'SIS', --The name of the linked Oracle database server.
 	@IncludeEmptyTables bit = 1, --Set to 1 to return information for tables wth no data rows.
+	@IncludeBannerItems bit = 0, --Set to 1 to include Banner info.
 	@IsDebug bit = 0 --Set to 1 to print SQL only.
 AS
 BEGIN
@@ -34,12 +37,15 @@ BEGIN
 	--For Debugging
 	DECLARE @IsDebug bit = 0, --Set to 1 to print SQL only.
 	@LinkedServerNames varchar(100) = N'SIS', --The name of the linked Oracle database server.
+	@
 	@IncludeEmptyTables bit = 0, --Set to 1 to return information for tables wth no data rows.
 	
 	*/
 
 DECLARE @NumSingleQuotes tinyint = 1
 DECLARE @WhereClause varchar(MAX) = ''
+
+
 
 DECLARE @TSQL varchar(MAX) = 'SELECT 
 	t1.LinkedServerName,
@@ -53,16 +59,25 @@ ELSE
 SELECT @TSQL += '
 FROM OwnerInfo t1'
 
+
 IF @LinkedServerNames IS NOT NULL AND @LinkedServerNames NOT LIKE ''
-	SELECT @WhereClause = '
-WHERE LinkedServerName IN (' + dbo.udf_CreateQuotedStringList(@NumSingleQuotes, @LinkedServerNames, DEFAULT) + ')'
+	SELECT @WhereClause = 'LinkedServerName IN (' + dbo.udf_CreateQuotedStringList(@NumSingleQuotes, @LinkedServerNames, DEFAULT) + ')'
+
+IF @IncludeBannerItems = 0
+		BEGIN
+			IF (@WhereClause IS NOT NULL AND @WhereClause NOT LIKE '')
+				SELECT @WhereClause += ' AND '
+
+			SELECT @WhereClause += 'LinkedServerName NOT LIKE ''SIS%'''
+		END
 
 IF @WhereClause IS NOT NULL AND @WhereClause NOT LIKE ''
-	SELECT @TSQL += @WhereClause
+	SELECT @TSQL += '
+WHERE ' + @WhereClause
 
 	SELECT @TSQL += '
 GROUP BY t1.LinkedServerName, t1.Owner, NumTables, NumTablesAll
-ORDER BY  t1.LinkedServerName, NumTables desc, t1.Owner'
+ORDER BY t1.LinkedServerName, NumTables desc, t1.Owner'
 
 	IF @ISDebug = 1
 		PRINT @TSQL

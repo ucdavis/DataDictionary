@@ -17,7 +17,8 @@ EXEC	@return_value = [dbo].[usp_GetLinkedServerConstraintColumnNames]
 		@TableNames = N'SHRTGRD',
 		@Owners = N'SATURN',
 		@LinkedServerNames = N'SIS',
-		@IsDebug = 1
+		@IncludeBannerItems = 1,
+		@IsDebug = 0
 
 SELECT	'Return Value' = @return_value
 
@@ -49,6 +50,7 @@ SYS_C009242	SATURN	SHRTGRD	SHRTGRD_ACTIVITY_DATE	NULL	ENABLED	C
 */
 -- Modifications:
 -- 2013-08-14 by kjt: Revised to use DBA database's ConstraintInfo table.
+-- 2014-04-01 by kjt: Added param @IncludeBannerItems to filter out data with whose LinkedServerNames begin with 'SIS'
 -- =============================================
 CREATE PROCEDURE [dbo].[usp_GetLinkedServerConstraintColumnNames] 
 	-- Add the parameters for the stored procedure here
@@ -56,6 +58,7 @@ CREATE PROCEDURE [dbo].[usp_GetLinkedServerConstraintColumnNames]
 	@Owners varchar(MAX) = 'SATURN', --A non-spaced, comma-delimited list of owners (schema(s), i.e.,'SHRTGRD' or 'SHRTGRD,SARADAP', etc. 
 	-- Note: Must supply NULL or '' for @Owner if you desire constraints for ALL database owners returned.
 	@LinkedServerNames varchar(MAX) = 'SIS', --A non-spaced, comma-delimited list of linked server names i.e.,'SIS' or 'SIS,SIS_DEV', etc. 
+	@IncludeBannerItems bit = 0, --Set to 1 to include Banner info.
 	@IsDebug bit = 0 --Set to 1 to only print SQL generated; 0 otherwise to run sproc.
 AS
 BEGIN
@@ -95,6 +98,14 @@ FROM ConstraintInfo'
 				SELECT @WhereClause += ' AND '
 
 			SELECT @WhereClause += 'TableName IN (' +  dbo.udf_CreateQuotedStringList(@NumQuotes , @TableNames, DEFAULT) +')'
+		END
+
+	IF @IncludeBannerItems = 0
+		BEGIN
+			IF (@WhereClause IS NOT NULL AND @WhereClause NOT LIKE '')
+				SELECT @WhereClause += ' AND '
+
+			SELECT @WhereClause += 'LinkedServerName NOT LIKE ''SIS%'''
 		END
 
 	IF @WhereClause IS NOT NULL AND @WhereClause NOT LIKE ''

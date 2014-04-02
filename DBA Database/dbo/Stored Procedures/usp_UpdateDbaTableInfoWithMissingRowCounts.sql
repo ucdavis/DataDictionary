@@ -17,7 +17,7 @@ SELECT	'Return Value' = @return_value
 GO
 */
 -- Modifications:
---
+-- 2014-03-07 by kjt: Added filtering for bad views UCD_1295_RANDOM and STUDENT_DEGREE_V.
 -- =============================================
 CREATE PROCEDURE [dbo].[usp_UpdateDbaTableInfoWithMissingRowCounts] 
 	@IsDebug bit = 0 --Set to 1 to print SQL only.
@@ -26,10 +26,10 @@ BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
-/*
+
 -- For debugging: cut and paste sproc between outside most BEGIN and END and the uncomment @IsDebug to run.
- DECLARE @IsDebug bit = 0
-*/
+ --DECLARE @IsDebug bit = 0
+
 
 	while EXISTS (
 		SELECT DISTINCT  [LinkedServerName], [Owner], [Tablename]
@@ -38,8 +38,10 @@ BEGIN
 		AND ([LinkedServerName]  NOT LIKE 'SIS_DEV' AND [Owner]  NOT LIKE 'BANINST1' --AND [TableName]   NOT LIKE 'G%V%'
 		) 
 		AND ([LinkedServerName]  NOT LIKE 'SIS' AND [Owner]  NOT LIKE 'UTILITY')
-		AND ([LinkedServerName] NOT LIKE 'MOTHRA_PROD' AND [Owner] NOT LIKE 'APEX_030200')
-		AND ([LinkedServerName] NOT LIKE 'ISODS_PROD' AND [Owner] NOT LIKE 'ORDDATA')
+		AND ([LinkedServerName]  NOT LIKE 'AIS_STAGE' AND [Owner]  NOT LIKE 'ADVANCEREP' AND [TableName] NOT LIKE 'UCD_1295_RANDOM')
+		AND ([LinkedServerName]  NOT LIKE 'ISODS_PROD' AND [Owner]  NOT LIKE 'PERSON' AND [TableName] NOT LIKE 'STUDENT_DEGREE_V')
+		AND [Owner] NOT LIKE 'APEX_030200'
+		AND [Owner] NOT LIKE 'ORDDATA'
 		AND NumRows IS NULL
 		)
 
@@ -50,8 +52,10 @@ BEGIN
 			AND ([LinkedServerName]  NOT LIKE 'SIS_DEV' AND [Owner]  NOT LIKE 'BANINST1' --AND [TableName]   NOT LIKE 'G%V%'
 			) 
 			AND ([LinkedServerName]  NOT LIKE 'SIS' AND [Owner]  NOT LIKE 'UTILITY')
-			AND ([LinkedServerName] NOT LIKE 'MOTHRA_PROD' AND [Owner] NOT LIKE 'APEX_030200')
-			AND ([LinkedServerName] NOT LIKE 'ISODS_PROD' AND [Owner] NOT LIKE 'ORDDATA')
+			AND ([LinkedServerName]  NOT LIKE 'AIS_STAGE' AND [Owner]  NOT LIKE 'ADVANCEREP' AND [TableName] NOT LIKE 'UCD_1295_RANDOM')
+			AND ([LinkedServerName]  NOT LIKE 'ISODS_PROD' AND [Owner]  NOT LIKE 'PERSON' AND [TableName] NOT LIKE 'STUDENT_DEGREE_V')
+			AND [Owner] NOT LIKE 'APEX_030200'
+			AND [Owner] NOT LIKE 'ORDDATA'
 			AND NumRows IS NULL
 
 			IF OBJECT_ID('tempdb..#CDW_ROW_COUNTS') IS NULL

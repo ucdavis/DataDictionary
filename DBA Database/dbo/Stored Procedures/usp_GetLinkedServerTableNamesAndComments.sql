@@ -13,6 +13,7 @@ EXEC	@return_value = [dbo].[usp_GetLinkedServerTableNamesAndComments]
 		@Owners = 'SATURN', --Use a non-spaced comma delimited list, i.e. 'SATURN,SYS', etc.
 		@TableNames = '', --Use a non-spaced comma delimited list, i.e. 'SABECRL,SABIDEN', etc.
 		@IncludeEmptyTables = 0, --Set to 1 to return information for tables wth no data rows.
+		@IncludeBannerItems = 0, --Set to 1 to return information pertaining to Banner.
 		@LinkedServerNames = 'SIS', --Use a non-spaced comma delimited list, i.e. 'SIS,FIS_DS', etc.
 		@IsDebug = 0
 
@@ -24,11 +25,13 @@ GO
 --	2013-08-14 by kjt: Renamed and revised for use with DBA database's TableInfo table, plus also handle
 --	multiple linked servers.
 --	2013-10-07 by kjt: Added "Text" as returned column.
+--  2014-04-01 by kjt: Added param @IncludeBannerItems to filter banner items.
 -- =============================================
-CREATE PROCEDURE [dbo].[usp_GetLinkedServerTableNamesAndComments] 
+create PROCEDURE [dbo].[usp_GetLinkedServerTableNamesAndComments] 
 	@Owners varchar(100) = 'SATURN', --Use a non-spaced comma delimited list, i.e. 'SATURN,SYS', etc.
 	@TableNames varchar(MAX) = '', --Use a non-spaced comma delimited list, i.e. 'SABECRL,SABIDEN', etc.
 	@IncludeEmptyTables bit = 0, --Set to 1 to return information for tables wth no data rows.
+	@IncludeBannerItems bit = 0, --Set to 1 to return information pertaining to Banner.
 	@LinkedServerNames varchar(100) = N'SIS',--Use a non-spaced comma delimited list, i.e. 'SIS,FIS_DS', etc.
 	@IsDebug bit = 0 --Set to 1 to print SQL only.
 AS
@@ -42,6 +45,7 @@ BEGIN
 	@Owners varchar(MAX) = 'SATURN', --Use a non-spaced comma delimited list, i.e. 'SATURN,SYS', etc.
 	@TableNames varchar(MAX) = '', --Use a non-spaced comma delimited list, i.e. 'SABECRL,SABIDEN', etc.
 	@IncludeEmptyTables = 0, --Set to 1 to return information for tables wth no data rows.
+	@IncludeBannerItems bit = 0,--Set to 1 to return information pertaining to Banner.
 	@LinkedServerNames varchar(MAX) = N'SIS' --Use a non-spaced comma delimited list, i.e. 'SIS,FIS_DS', etc.
 	*/
 
@@ -50,6 +54,13 @@ BEGIN
 
 	IF @LinkedServerNames IS NOT NULL AND @LinkedServerNames NOT LIKE ''
 		SELECT @WhereClause = 'LinkedServerName IN (' + dbo.udf_CreateQuotedStringList(@NumQuotes, @LinkedServerNames, DEFAULT) + ')'
+
+	IF @IncludeBannerItems = 0
+		IF @LinkedServerNames IS NOT NULL AND @LinkedServerNames NOT LIKE ''
+			SELECT @WhereClause += ' AND LinkedServerName NOT LIKE ''SIS%'''
+		ELSE 
+			SELECT @WhereClause = '
+WHERE LinkedServerName NOT LIKE ''SIS%'''
 
 	IF @TableNames IS NOT NULL AND @TableNames NOT LIKE ''
 		BEGIN

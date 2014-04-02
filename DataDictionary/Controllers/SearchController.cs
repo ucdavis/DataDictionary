@@ -24,7 +24,12 @@ namespace BannerDataDictionary.Controllers
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["MainDb"].ConnectionString))
             {
                 conn.Open();
-                viewModel.LinkedServers = conn.Query<LinkedServer>(@"EXEC usp_GetOracleLinkedServerNames").ToList();
+
+                var loginId = User.Identity.Name;
+                var bannerUserList = conn.Query(string.Format("SELECT LoginId FROM BannerLoginIds WHERE LoginId = '{0}'", loginId)).ToList();
+                var includeBannerItems = bannerUserList.Count() == 1 ? true : false;
+
+                viewModel.LinkedServers = conn.Query<LinkedServer>(string.Format("EXEC usp_GetOracleLinkedServerNames @IncludeBannerItems = {0}", includeBannerItems)).ToList();
 
                 return View(viewModel);
             }
@@ -55,12 +60,20 @@ namespace BannerDataDictionary.Controllers
                     }
 
                     conn.Open();
+
+                    var loginId = User.Identity.Name;
+                    var bannerUserList = conn.Query(string.Format("SELECT LoginId FROM BannerLoginIds WHERE LoginId = '{0}'", loginId)).ToList();
+                    var includeBannerItems = bannerUserList.Count() == 1 ? true : false;
+
                     var results =
                         conn.Query<SearchResult>(
                             @"SELECT * FROM dbo.udf_GetTableColumnCommentsResults(@searchString, @LinkedServerNames, 
-                                @SearchTables, @SearchColumns, @SearchComments)",
+                                @SearchTables, @SearchColumns, @SearchComments, @IncludeBannerItems)",
                             new {@searchString = searchString, @LinkedServerNames = selectedServerNamesString,
-                                 @SearchTables = searchTables, @SearchColumns = searchColumns, @SearchComments = searchComments
+                                 @SearchTables = searchTables,
+                                 @SearchColumns = searchColumns,
+                                 @SearchComments = searchComments,
+                                 @IncludeBannerItems = includeBannerItems 
                             }).ToList();
 
                     if (results.Count == 1)
