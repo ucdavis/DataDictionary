@@ -100,6 +100,7 @@
     <Build Include="dbo\Functions\udf_GetOracleLinkedServers.sql" />
     <Build Include="dbo\Stored Procedures\usp_LoadDbaBannerLoginIds.sql" />
     <Build Include="dbo\Stored Procedures\usp_GetOracleLinkedServers.sql" />
+    <Build Include="dbo\Stored Procedures\usp_UpdateBannerColumnInfoWithSamplesAndExampleData.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\100\SqlSchemas\master.dacpac">

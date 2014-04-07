@@ -1,11 +1,11 @@
 ﻿USE [msdb]
 GO
 
-/****** Object:  Job [Update DBA database]    Script Date: 4/2/2014 10:29:10 AM ******/
+/****** Object:  Job [Update DBA database]    Script Date: 4/7/2014 9:49:34 AM ******/
 BEGIN TRANSACTION
 DECLARE @ReturnCode INT
 SELECT @ReturnCode = 0
-/****** Object:  JobCategory [[Uncategorized (Local)]]]    Script Date: 4/2/2014 10:29:10 AM ******/
+/****** Object:  JobCategory [[Uncategorized (Local)]]]    Script Date: 4/7/2014 9:49:34 AM ******/
 IF NOT EXISTS (SELECT name FROM msdb.dbo.syscategories WHERE name=N'[Uncategorized (Local)]' AND category_class=1)
 BEGIN
 EXEC @ReturnCode = msdb.dbo.sp_add_category @class=N'JOB', @type=N'LOCAL', @name=N'[Uncategorized (Local)]'
@@ -25,7 +25,7 @@ EXEC @ReturnCode =  msdb.dbo.sp_add_job @job_name=N'Update DBA database',
 		@category_name=N'[Uncategorized (Local)]', 
 		@owner_login_name=N'sa', @job_id = @jobId OUTPUT
 IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
-/****** Object:  Step [Load DBA TableInfo]    Script Date: 4/2/2014 10:29:11 AM ******/
+/****** Object:  Step [Load DBA TableInfo]    Script Date: 4/7/2014 9:49:34 AM ******/
 EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id=@jobId, @step_name=N'Load DBA TableInfo', 
 		@step_id=1, 
 		@cmdexec_success_code=0, 
@@ -49,7 +49,7 @@ GO',
 		@database_name=N'master', 
 		@flags=0
 IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
-/****** Object:  Step [Load DBA ColumnInfo]    Script Date: 4/2/2014 10:29:11 AM ******/
+/****** Object:  Step [Load DBA ColumnInfo]    Script Date: 4/7/2014 9:49:34 AM ******/
 EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id=@jobId, @step_name=N'Load DBA ColumnInfo', 
 		@step_id=2, 
 		@cmdexec_success_code=0, 
@@ -73,9 +73,34 @@ GO',
 		@database_name=N'master', 
 		@flags=0
 IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
-/****** Object:  Step [Load DBA IndexInfo]    Script Date: 4/2/2014 10:29:11 AM ******/
-EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id=@jobId, @step_name=N'Load DBA IndexInfo', 
+/****** Object:  Step [Update TableInfo and ColumnInfo with sample and example items from Megan Richmond]    Script Date: 4/7/2014 9:49:34 AM ******/
+EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id=@jobId, @step_name=N'Update TableInfo and ColumnInfo with sample and example items from Megan Righmond', 
 		@step_id=3, 
+		@cmdexec_success_code=0, 
+		@on_success_action=3, 
+		@on_success_step_id=0, 
+		@on_fail_action=2, 
+		@on_fail_step_id=0, 
+		@retry_attempts=0, 
+		@retry_interval=0, 
+		@os_run_priority=0, @subsystem=N'TSQL', 
+		@command=N'USE [DBA]
+GO
+
+DECLARE	@return_value int
+
+EXEC	@return_value = [dbo].[usp_UpdateBannerColumnInfoWithSamplesAndExampleData]
+
+SELECT	''Return Value'' = @return_value
+
+GO
+', 
+		@database_name=N'DBA', 
+		@flags=0
+IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
+/****** Object:  Step [Load DBA IndexInfo]    Script Date: 4/7/2014 9:49:34 AM ******/
+EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id=@jobId, @step_name=N'Load DBA IndexInfo', 
+		@step_id=4, 
 		@cmdexec_success_code=0, 
 		@on_success_action=3, 
 		@on_success_step_id=0, 
@@ -97,9 +122,9 @@ GO',
 		@database_name=N'master', 
 		@flags=0
 IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
-/****** Object:  Step [Load DBA ConstraintInfo]    Script Date: 4/2/2014 10:29:11 AM ******/
+/****** Object:  Step [Load DBA ConstraintInfo]    Script Date: 4/7/2014 9:49:34 AM ******/
 EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id=@jobId, @step_name=N'Load DBA ConstraintInfo', 
-		@step_id=4, 
+		@step_id=5, 
 		@cmdexec_success_code=0, 
 		@on_success_action=3, 
 		@on_success_step_id=0, 
@@ -121,9 +146,9 @@ GO',
 		@database_name=N'master', 
 		@flags=0
 IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
-/****** Object:  Step [Update DBA TableInfo with missing row counts]    Script Date: 4/2/2014 10:29:11 AM ******/
+/****** Object:  Step [Update DBA TableInfo with missing row counts]    Script Date: 4/7/2014 9:49:34 AM ******/
 EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id=@jobId, @step_name=N'Update DBA TableInfo with missing row counts', 
-		@step_id=5, 
+		@step_id=6, 
 		@cmdexec_success_code=0, 
 		@on_success_action=3, 
 		@on_success_step_id=0, 
@@ -145,9 +170,9 @@ GO',
 		@database_name=N'master', 
 		@flags=0
 IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
-/****** Object:  Step [Load DBA OwnerInfo]    Script Date: 4/2/2014 10:29:11 AM ******/
+/****** Object:  Step [Load DBA OwnerInfo]    Script Date: 4/7/2014 9:49:34 AM ******/
 EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id=@jobId, @step_name=N'Load DBA OwnerInfo', 
-		@step_id=6, 
+		@step_id=7, 
 		@cmdexec_success_code=0, 
 		@on_success_action=3, 
 		@on_success_step_id=0, 
@@ -169,9 +194,9 @@ GO',
 		@database_name=N'master', 
 		@flags=0
 IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
-/****** Object:  Step [Load DBA ServerOwnerTableColumn]    Script Date: 4/2/2014 10:29:11 AM ******/
+/****** Object:  Step [Load DBA ServerOwnerTableColumn]    Script Date: 4/7/2014 9:49:34 AM ******/
 EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id=@jobId, @step_name=N'Load DBA ServerOwnerTableColumn', 
-		@step_id=7, 
+		@step_id=8, 
 		@cmdexec_success_code=0, 
 		@on_success_action=3, 
 		@on_success_step_id=0, 
@@ -191,9 +216,9 @@ GO',
 		@database_name=N'master', 
 		@flags=0
 IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
-/****** Object:  Step [MERGE DBA BannerLoginIds]    Script Date: 4/2/2014 10:29:11 AM ******/
+/****** Object:  Step [MERGE DBA BannerLoginIds]    Script Date: 4/7/2014 9:49:34 AM ******/
 EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id=@jobId, @step_name=N'MERGE DBA BannerLoginIds', 
-		@step_id=8, 
+		@step_id=9, 
 		@cmdexec_success_code=0, 
 		@on_success_action=1, 
 		@on_success_step_id=0, 

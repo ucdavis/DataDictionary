@@ -51,11 +51,38 @@
                            try
                            {
                                var myDoc = XDocument.Parse(@item.ColumnComments);
-                               foreach (var node in myDoc.Descendants().Where(x => x.Name != "cmt"))
+                               
+                               foreach (var comment in myDoc.Descendants("cmt"))
                                {
-                                   <li>
-                                       <strong>@node.Name.ToString().ToUpper():</strong> @node.Value
-                                   </li>
+                                   foreach (var element in comment.Elements())
+                                   {
+                                       if (element.HasElements)
+                                       {
+                                           <li><strong>@string.Format("{0}: ", @element.Name).ToUpper()</strong>
+                                               
+                                               <ul>
+                                                   @foreach (var subElement in element.Descendants())
+                                                   {
+                                                       if (subElement.HasAttributes)
+                                                       {
+                                                           foreach (var attribute in subElement.Attributes())
+                                                           {
+                                                               <li>@string.Format("{0}: {1}", @subElement.Value, @attribute.Value)</li>
+                                                           }
+                                                       }
+                                                       else
+                                                       {
+                                                           <li>@string.Format("{0}", @subElement.Value)</li>
+                                                       }
+                                                   }
+                                               </ul>
+                                           </li>
+                                       }
+                                       else
+                                       {
+                                           <li><strong>@element.Name.ToString().ToUpper():</strong> @element.Value</li>
+                                       }     
+                                   }
                                }
                            }
                            catch (System.Xml.XmlException ex)
@@ -71,7 +98,7 @@
                            }
                        }
                         </ul>
-                    }
+                    } @*end if (@item.ColumnComments != null && @item.ColumnComments.Contains("<cmt>"))*@
                     else
                     {
                         @item.ColumnComments
