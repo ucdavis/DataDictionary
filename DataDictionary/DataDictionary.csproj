@@ -237,6 +237,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\CasMvc.cs" />
     <Compile Include="Properties\Models\AccountModels.cs" />
     <Compile Include="Properties\Models\OwnersModel.cs" />
     <Compile Include="Properties\Models\SearchModel.cs" />

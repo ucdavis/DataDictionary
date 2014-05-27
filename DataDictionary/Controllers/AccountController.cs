@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Transactions;
 using System.Web;
@@ -10,6 +11,7 @@ using Microsoft.Web.WebPages.OAuth;
 using WebMatrix.WebData;
 using BannerDataDictionary.Filters;
 using BannerDataDictionary.Models;
+using BannerDataDictionary.Helpers;
 
 namespace BannerDataDictionary.Controllers
 {
@@ -23,7 +25,7 @@ namespace BannerDataDictionary.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-            UCDArch.Web.Authentication.CASHelper.LoginAndRedirect();
+            CasMvc.LoginAndRedirect();
             return View();
         }
 
