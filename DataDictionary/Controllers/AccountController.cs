@@ -25,8 +25,7 @@ namespace BannerDataDictionary.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-            CasMvc.LoginAndRedirect();
-            return View();
+            return CasMvc.LoginAndRedirect();
         }
 
         //
