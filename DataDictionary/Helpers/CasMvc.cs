@@ -80,22 +80,26 @@ namespace BannerDataDictionary.Helpers
                 if (!string.IsNullOrEmpty(ticket))
                 {
                     // validate ticket against cas
-                    var sr = new StreamReader(new WebClient().OpenRead(StrCasUrl + "validate?ticket=" + ticket + "&service=" + service));
-
-                    // parse text file
-                    if (sr.ReadLine() == "yes")
+                    // Ensure TLS 1.2 is used for the HTTPS connection to the CAS server
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                    using (var webClient = new WebClient())
+                    using (var sr = new StreamReader(webClient.OpenRead(StrCasUrl + "validate?ticket=" + ticket + "&service=" + service)))
                     {
-                        // get kerberos id
-                        string kerberos = sr.ReadLine();
+                        // parse text file
+                        if (sr.ReadLine() == "yes")
+                        {
+                            // get kerberos id
+                            string kerberos = sr.ReadLine();
 
-                        // set forms authentication ticket
-                        FormsAuthentication.SetAuthCookie(kerberos, false);
+                            // set forms authentication ticket
+                            FormsAuthentication.SetAuthCookie(kerberos, false);
 
-                        string returnUrl = GetReturnUrl();
+                            string returnUrl = GetReturnUrl();
 
-                        return !string.IsNullOrEmpty(returnUrl)
-                            ? new RedirectResult(returnUrl)
-                            : new RedirectResult(FormsAuthentication.DefaultUrl);
+                            return !string.IsNullOrEmpty(returnUrl)
+                                ? new RedirectResult(returnUrl)
+                                : new RedirectResult(FormsAuthentication.DefaultUrl);
+                        }
                     }
                 }
 
